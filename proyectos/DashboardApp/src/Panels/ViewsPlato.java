@@ -72,7 +72,7 @@ public class ViewsPlato extends javax.swing.JPanel {
 
         txt_buscar.setFont(new java.awt.Font("Times New Roman", 0, 17)); // NOI18N
 
-        lbl_buscar.setIcon(new javax.swing.ImageIcon("\\img\\search24.png")); // NOI18N
+        lbl_buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search24.png"))); // NOI18N
         lbl_buscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_buscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

@@ -70,7 +70,7 @@ public class subViews extends javax.swing.JPanel {
         txt_v_nombre.setEditable(false);
         txt_v_nombre.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
 
-        btn_v_delete.setIcon(new javax.swing.ImageIcon("\\img\\trash.png")); // NOI18N
+        btn_v_delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
         btn_v_delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_v_deleteActionPerformed(evt);
@@ -79,7 +79,8 @@ public class subViews extends javax.swing.JPanel {
 
         btn_v_edit.setFont(new java.awt.Font("Segoe UI", 0, 3)); // NOI18N
         btn_v_edit.setForeground(new java.awt.Color(255, 255, 255));
-        btn_v_edit.setIcon(new javax.swing.ImageIcon("\\img\\pencil.png")); // NOI18N
+        btn_v_edit.setIcon(new javax.swing.ImageIcon("\\img\\pencil.png"));
+        btn_v_edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pencil.png"))); // NOI18N
         btn_v_edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_v_editActionPerformed(evt);

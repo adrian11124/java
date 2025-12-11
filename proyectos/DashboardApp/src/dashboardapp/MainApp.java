@@ -118,7 +118,7 @@ public class MainApp extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbl_exit.setIcon(new javax.swing.ImageIcon("\\img\\power.png")); // NOI18N
+        lbl_exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/power.png")));// NOI18N
         lbl_exit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_exit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -145,7 +145,7 @@ public class MainApp extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbl_inicio.setIcon(new javax.swing.ImageIcon("\\img\\home.png")); // NOI18N
+        lbl_inicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         lbl_inicio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_inicio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -172,7 +172,7 @@ public class MainApp extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbl_newPlato.setIcon(new javax.swing.ImageIcon("\\img\\add.png")); // NOI18N
+        lbl_newPlato.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add.png"))); // NOI18N
         lbl_newPlato.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_newPlato.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -199,7 +199,7 @@ public class MainApp extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbl_history.setIcon(new javax.swing.ImageIcon("\\img\\time-past.png")); // NOI18N
+        lbl_history.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/time-past.png"))); // NOI18N
         lbl_history.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_history.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -226,7 +226,7 @@ public class MainApp extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbl_views.setIcon(new javax.swing.ImageIcon("\\img\\grid.png")); // NOI18N
+        lbl_views.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/grid.png"))); // NOI18N
         lbl_views.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbl_views.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
