@@ -27,7 +27,7 @@ public class subViews extends javax.swing.JPanel {
     }
 
     public static void deletePlato() {
-        CtrPlato.deletePlato(subViews.txt_v_nombre.getText());
+        CtrPlato.deletePlato(txt_v_nombre.getText());
         MainApp.getPnlViewsPlato();
     }
 

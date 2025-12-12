@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author adrian11124
@@ -31,38 +33,26 @@ public class MainApp extends javax.swing.JFrame {
 
     public static void getPnlInicio(){
         Inicio panel = new Inicio();
-        PnlContaint.removeAll();
-        PnlContaint.setLayout(new BorderLayout());
-        PnlContaint.add(panel);
-        PnlContaint.add(panel);
-        PnlContaint.revalidate();
-        PnlContaint.repaint();
+        ajustarNewPlanel(panel);
         
     }
     public static void getPnlViewsPlato(){
         ViewsPlato panel = new ViewsPlato();
-        PnlContaint.removeAll();
-        PnlContaint.setLayout(new BorderLayout());
-        PnlContaint.add(panel);
-        PnlContaint.add(panel);
-        PnlContaint.revalidate();
-        PnlContaint.repaint();
-        
+        ajustarNewPlanel(panel);
     }
     
     
     public static void getPnlAgregar(){
         Agregar panel = new Agregar();
-        PnlContaint.removeAll();
-        PnlContaint.setLayout(new BorderLayout());
-        PnlContaint.add(panel);
-        PnlContaint.add(panel);
-        PnlContaint.revalidate();
-        PnlContaint.repaint();
+        ajustarNewPlanel(panel);
     }
     
     public static void getPnlHistorial(){
         Historial panel = new Historial();
+        ajustarNewPlanel(panel);
+    }
+
+    public static void ajustarNewPlanel(JPanel panel){
         PnlContaint.removeAll();
         PnlContaint.setLayout(new BorderLayout());
         PnlContaint.add(panel);
@@ -70,6 +60,7 @@ public class MainApp extends javax.swing.JFrame {
         PnlContaint.revalidate();
         PnlContaint.repaint();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
