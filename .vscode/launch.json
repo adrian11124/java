@@ -6,16 +6,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Hotel",
+            "name": "MainApp",
             "request": "launch",
-            "mainClass": "hotel.Hotel",
+            "mainClass": "dashboardapp.MainApp",
             "projectName": "java_89b1c843"
         },
         {
             "type": "java",
-            "name": "Current File",
+            "name": "MainApp",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "MainApp",
+            "projectName": "java_89b1c843"
         }
     ]
 }
