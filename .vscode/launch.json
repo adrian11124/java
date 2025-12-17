@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Hotel",
+            "request": "launch",
+            "mainClass": "hotel.Hotel",
+            "projectName": "java_89b1c843"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
