@@ -33,26 +33,26 @@ public class MainApp extends javax.swing.JFrame {
 
     public static void getPnlInicio(){
         Inicio panel = new Inicio();
-        ajustarNewPlanel(panel);
+        ajustarNewPanel(panel);
         
     }
+    
     public static void getPnlViewsPlato(){
         ViewsPlato panel = new ViewsPlato();
-        ajustarNewPlanel(panel);
-    }
-    
+        ajustarNewPanel(panel);
+    }   
     
     public static void getPnlAgregar(){
         Agregar panel = new Agregar();
-        ajustarNewPlanel(panel);
+        ajustarNewPanel(panel);
     }
     
     public static void getPnlHistorial(){
         Historial panel = new Historial();
-        ajustarNewPlanel(panel);
+        ajustarNewPanel(panel);
     }
 
-    public static void ajustarNewPlanel(JPanel panel){
+    public static void ajustarNewPanel(JPanel panel){
         PnlContaint.removeAll();
         PnlContaint.setLayout(new BorderLayout());
         PnlContaint.add(panel);
