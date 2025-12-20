@@ -1,6 +1,6 @@
 package Panels;
 
-import Controlador.CtrCompra;
+import Controlador.CtrVenta;
 import dashboardapp.MainApp;
 import static dashboardapp.MainApp.getPnlInicio;
 import static dashboardapp.MainApp.mpPlato;
@@ -16,21 +16,36 @@ public class Inicio extends javax.swing.JPanel {
     public Inicio() {
         initComponents();
         getListNombrePlato();
-        getCompras();
+        getVentas();
     }
     
-    public static void getCompras(){
+    /**
+     *Muestra todas las ventas almacenadas en tabla
+     *parametros requeridos: n/a
+     *return: void
+     */
+    public static void getVentas(){
         tbl_contentCompras.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 16));
         DefaultTableModel modelo = (DefaultTableModel) tbl_contentCompras.getModel();
-        for (Modelo.Compra c : MainApp.StkCompras) {
+        for (Modelo.Venta c : MainApp.StkCompras) {
             modelo.addRow(new Object[]{c.getPlato(), c.getValor(), c.getFecha()});
         }
     }
     
-    public static void ComprarPlato(){  
-        CtrCompra.Comprar(""+cbx_nombrePlato.getSelectedItem(), lblTotalPagar.getText());
+    /**
+     *llamar logica de vender un plato
+     *parametros requeridos: nombre del plato, total a pagar
+     *return: void
+     */
+    public static void venderPlato(){  
+        CtrVenta.vender(""+cbx_nombrePlato.getSelectedItem(), lblTotalPagar.getText());
     }
     
+    /**
+     *Recorre el mpPlato y se toma su key para introducirlo en cbx_nombrePlato
+     *parametros requeridos: n/a
+     *return: void
+     */
     public static void getListNombrePlato(){
         for (String item : mpPlato.keySet()) {
             cbx_nombrePlato.addItem(item);
@@ -208,7 +223,7 @@ public class Inicio extends javax.swing.JPanel {
     }//GEN-LAST:event_sp_cantidadStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        ComprarPlato();
+        venderPlato();
         getPnlInicio();
     }//GEN-LAST:event_jButton2ActionPerformed
 

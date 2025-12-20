@@ -5,15 +5,15 @@ package Modelo;
  *
  * @author adrian11124
  */
-public class Compra {
+public class Venta {
     private String plato;
     private String valor;
     private String fecha;
 
-    public Compra() {
+    public Venta() {
     }
     
-    public Compra(String plato, String valor, String fecha) {
+    public Venta(String plato, String valor, String fecha) {
         this.plato = plato;
         this.valor = valor;
         this.fecha = fecha;

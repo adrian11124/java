@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 public class MainApp extends javax.swing.JFrame {
     
     public static Stack<Modelo.Historial> StkHistorial = new Stack<>();// pilas
-    public static Stack<Modelo.Compra> StkCompras = new Stack<>();// pilas
+    public static Stack<Modelo.Venta> StkCompras = new Stack<>();// pilas
     public static Map<String, Plato> mpPlato = new HashMap<>();
 
     public MainApp() {
