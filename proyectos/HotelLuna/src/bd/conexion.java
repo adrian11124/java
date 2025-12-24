@@ -119,6 +119,44 @@ public class conexion {
         }
     }
 
+    public void guardarProceso() {
+        String data = "";
+        try {
+            Integer id = 1;
+            if (!MainRunApp.listHuespeds.isEmpty()) {
+                for (Huesped hpd : MainRunApp.listHuespeds) {
+                    data += ((id++) + "," + hpd.getNombre().toUpperCase() + "," + hpd.getNumDocumento() + "_");
+                }
+            }
+            String substring1 = data.substring(0, data.length() - 1);
+            data = substring1 + ";";
+            for (Habitacion hbt : MainRunApp.listHBT) {
+                data += (hbt.getId() + "," + hbt.getNumero() + "," + hbt.getPrecio()
+                        + "," + hbt.getTipo().toUpperCase() + "," + hbt.getEstado().toUpperCase() + "_");
+            }
+            String substring2 = data.substring(0, data.length() - 1);
+            data = substring2 + ";";
+            for (HabitacionVIP hpd : MainRunApp.listHBTVIP) {
+                data += (hpd.getId() + "," + hpd.getNumero() + "," + hpd.getPrecio()
+                        + "," + hpd.getTipo().toUpperCase() + "," + hpd.getEstado().toUpperCase() + "," + hpd.getServiciosExtras() + "_");
+            }
+            String substring3 = data.substring(0, data.length() - 1);
+            data = substring3 + ";";
+            if (!MainRunApp.listReserva.isEmpty()) {
+                id = 1;
+                for (Reserva r : MainRunApp.listReserva) {
+                    data += ((id++) + "," + r.getNumHabitacion() + "," + r.getHuesped()
+                            + "," + r.getNombreHuesped().toUpperCase() + "," + r.getVip() + "," + r.getFechaIngreso() + "," + r.getFechaSalida() + "_");
+                }
+            }
+            String substring4 = data.substring(0, data.length() - 1);
+            data = substring4 + ";";
+            fileUpdate("archivo.txt", data);
+        } catch (Exception e) {
+            System.out.println("No se pudo guardar proceso en documento en texto");
+        }
+    }
+
     public static void main(String[] args) {
         
         String[] maca = fileRead("archivo.txt");

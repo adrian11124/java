@@ -3,7 +3,10 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.awt.HeadlessException;
+
 import Models.Habitacion;
+import Models.HabitacionVIP;
 import Models.Reserva;
 import hotel.MainRunApp;
 
@@ -14,7 +17,7 @@ import hotel.MainRunApp;
 public class CtrReserva {
 
     /**
-     * 
+     *genera un array(reserva)
      * 
      */
     public String[] getValuesRSV(Reserva hpd) {
@@ -40,7 +43,7 @@ public class CtrReserva {
      *genera reserva de 
      *return: n/a
      */
-    public void generarReserva(List<String> datosHuesped) {
+    public static void generarReserva(List<String> datosHuesped) {
         Reserva r = new Reserva();
         r.setId(cantidadRSV() + 1);
         r.setHuesped(datosHuesped.get(0));
@@ -69,7 +72,7 @@ public class CtrReserva {
      *genera total de reservas
      *return: n/a
      */
-    public int cantidadRSV() {
+    public static int cantidadRSV() {
         return MainRunApp.listReserva.size();
     }
 
@@ -80,4 +83,41 @@ public class CtrReserva {
         }
         return listArray;
     }   
+
+    public void removeRSV(String id) {
+        try {
+            int i = 0;
+            Integer parseId = Integer.valueOf(id);
+            for (Reserva r : MainRunApp.listReserva) {
+                if (r.getId().equals(parseId)) {
+
+                    boolean rh = false;
+                    for (Habitacion h : MainRunApp.listHBT) {
+                        if (h.getNumero().equals(r.getNumHabitacion())) {
+                            h.setEstado("MANTENIMIENTO");
+                            rh = true;
+                            break;
+                        }
+
+                    }
+                    for (HabitacionVIP h : MainRunApp.listHBTVIP) {
+                        if (h.getNumero().equals(r.getNumHabitacion())) {
+                            h.setEstado("MANTENIMIENTO");
+                            rh = true;
+                            break;
+                        }
+
+                    }
+                    if (rh) {
+                        MainRunApp.listReserva.remove(i);
+                        break;
+                    }
+
+                }
+                i++;
+            }
+        } catch (HeadlessException e) {
+            System.out.println("No se puede actualizar usuario, por favor valide haber seleccionado un registro");
+        }
+    }
 }

@@ -20,6 +20,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import controllers.CtrHabitacion;
+import controllers.CtrHuesped;
+import controllers.CtrReserva;
 import controllers.Inventario;
 
 /**
@@ -44,7 +47,7 @@ public class JReservar {
 
         String[] columnas = {"DOCUMENTO", "NOMBRE"};
         VentanasSecundarias vtns = new VentanasSecundarias();
-        DefaultTableModel model = vtns.tableModel(inv.getDataHPD(), columnas);
+        DefaultTableModel model = vtns.tableModel(CtrHuesped.getDataHPD(), columnas);
         JTable table = new JTable(model);
         table.setFocusable(false);
         JButton btnSiguiente = new JButton("SIGUIENTE");
@@ -53,7 +56,7 @@ public class JReservar {
         btnCancelar.setFocusable(false);
         btnBuscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : inv.buscarHPD("numDocumento", txtBuscar.getText())) {
+            for (String[] obj : CtrHuesped.buscarHPD("numDocumento", txtBuscar.getText())) {
                 model.addRow(obj);
             }
             btnSiguiente.setEnabled(false);
@@ -108,11 +111,11 @@ public class JReservar {
         if (esVIP) {
 
             columnasHab = new String[]{"# HABITACION", "PRECIO", "TIPO", "ESTADO", "SERVICIOS EXTRA"};
-            model = vtns.tableModel(inv.getDataHBTVIPDisponible(), columnasHab);
+            model = vtns.tableModel(CtrHabitacion.getDataHBTVIPDisponible(), columnasHab);
             
             btnBuscar.addActionListener((e) -> {
                 model.setRowCount(0);
-                for (String[] obj : inv.buscarHBTVIP("numero", txtBuscar.getText())) {
+                for (String[] obj : CtrHabitacion.buscarHBTVIP("numero", txtBuscar.getText())) {
                     model.addRow(obj);
                 }
                 btnSiguiente.setEnabled(false);
@@ -120,11 +123,11 @@ public class JReservar {
             datosHuesped.add("SI");
         } else {
             columnasHab = new String[]{"# HABITACION", "PRECIO", "TIPO", "ESTADO"};
-            model = vtns.tableModel(inv.getDataHBTDisponible(), columnasHab);
+            model = vtns.tableModel(CtrHabitacion.getDataHBTDisponible(), columnasHab);
             
             btnBuscar.addActionListener((e) -> {
                 model.setRowCount(0);
-                for (String[] obj : inv.buscarHBT("numero", txtBuscar.getText())) {
+                for (String[] obj : CtrHabitacion.buscarHBT("numero", txtBuscar.getText())) {
                     model.addRow(obj);
                 }
                 btnSiguiente.setEnabled(false);
@@ -256,7 +259,7 @@ public class JReservar {
             datosHuesped.add(cbxDiaSalida.getSelectedItem() + "/" + cbxMesSalida.getSelectedItem()
                     + "/" + cbxAnioSalida.getSelectedItem());
 
-            inv.generarReserva(datosHuesped, inv);
+            CtrReserva.generarReserva(datosHuesped);
             dialog3.dispose();
         });
         dialog3.setVisible(true);

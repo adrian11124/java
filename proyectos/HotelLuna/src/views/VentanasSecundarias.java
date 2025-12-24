@@ -40,6 +40,7 @@ import Models.Habitacion;
 import Models.HabitacionVIP;
 import Models.Huesped;
 import bd.conexion;
+import controllers.CtrHabitacion;
 import controllers.CtrHuesped;
 import controllers.Inventario;
 
@@ -101,7 +102,7 @@ public class VentanasSecundarias {
             "TIPO",
             "ESTADO"
         };
-        DefaultTableModel model = tableModel(inventario.getDataHBT(), columnTable);
+        DefaultTableModel model = tableModel(CtrHabitacion.getDataHBT(), columnTable);
         JTable table = new JTable(model);
         table.setFocusable(false);
         JScrollPane scroll = new JScrollPane(table);
@@ -118,7 +119,7 @@ public class VentanasSecundarias {
         pnlBuscar.add(new JLabel("CANTIDAD HABITACIONES: " + inventario.getDataHBT().size()));
         btnBuscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : inventario.buscarHBT("numero", txtbuscar.getText())) {
+            for (String[] obj : CtrHabitacion.buscarHBT("numero", txtbuscar.getText())) {
                 model.addRow(obj);
             }
            btnActualizar.setEnabled(false);
@@ -150,12 +151,12 @@ public class VentanasSecundarias {
     private void actualizarHBT(Inventario inv, JFrame frame, String numHabitacion, JPanel pnl2) {
         try {
             Habitacion hbt = null;
-            for (Habitacion h : inv.getListHBT()) {
-                if (h.getNumero().equals(numHabitacion)) {
-                    hbt = h;
-                    break;
-                }
-            }
+            // for (Habitacion h : inv.getListHBT()) {
+            //     if (h.getNumero().equals(numHabitacion)) {
+            //         hbt = h;
+            //         break;
+            //     }
+            // }
             JDialog dialog = new JDialog(frame, true);
             dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             dialog.setSize(550, 700);
@@ -279,7 +280,7 @@ public class VentanasSecundarias {
                 System.out.println("Precio:: "+txtPrecio.getText());
                 hbt1.setTipo("" + cbxTipoHbt.getSelectedItem());
                 hbt1.setEstado("" + cbxEstado.getSelectedItem());
-                inv.actualizarHBT(hbt1);
+                //inv.actualizarHBT(hbt1);
                 loadPnlIndex(pnl2);
                 pnl2.add(listarHabitaciones(inv, frame));
                 dialog.dispose();
@@ -295,12 +296,12 @@ public class VentanasSecundarias {
     private void actualizarHBTVIP(Inventario inv, JFrame frame, String numHabitacion, JPanel pnl2) {
         try {
             HabitacionVIP hbt = null;
-            for (HabitacionVIP h : inv.getListHBTVIP()) {
-                if (h.getNumero().equals(numHabitacion)) {
-                    hbt = h;
-                    break;
-                }
-            }
+            // for (HabitacionVIP h : inv.getListHBTVIP()) {
+            //     if (h.getNumero().equals(numHabitacion)) {
+            //         hbt = h;
+            //         break;
+            //     }
+            // }
             JDialog dialog = new JDialog(frame, true);
             dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             dialog.setSize(550, 700);
@@ -505,7 +506,7 @@ public class VentanasSecundarias {
             "TIPO",
             "ESTADO",
             "VIP"};
-        DefaultTableModel model = tableModel(inventario.getDataHBTVIP(), columnTable);
+        DefaultTableModel model = tableModel(CtrHabitacion.getDataHBTVIP(), columnTable);
         JTable table = new JTable(model);
         JScrollPane scroll = new JScrollPane(table);
         table.setFocusable(false);

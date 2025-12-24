@@ -30,7 +30,7 @@ public class CtrHabitacion {
      *los valores, agregados a un array
      *return: String[]
      */
-    public String[] getValues(Object hbt) {
+    public static String[] getValues(Object hbt) {
         String[] habitacion = hbt.toString().split(",");
         String h = "";
         for (String atr : habitacion) {
@@ -59,7 +59,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(habitaciones normales)
      *return: List<String[]>
      */
-    public List<String[]> getDataHBT() {
+    public static List<String[]> getDataHBT() {
         List<String[]> listArray = new ArrayList<>();
         for (Habitacion hbt : MainRunApp.listHBT) {
             listArray.add(getValues(hbt));
@@ -71,7 +71,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(habitaciones) disponibles
      *return: List<String[]>
      */
-    public List<String[]> getDataHBTDisponible() {
+    public static List<String[]> getDataHBTDisponible() {
         List<String[]> listArray = new ArrayList<>();
         for (Habitacion hbt : MainRunApp.listHBT) {
             if (hbt.getEstado().equals("DISPONIBLE")) {
@@ -86,7 +86,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(Habitaciones) disponibles
      *return: List<String[]>
      */
-    public List<String[]> getDataHBTVIP() {
+    public static List<String[]> getDataHBTVIP() {
         List<String[]> listArray = new ArrayList<>();
         for (HabitacionVIP vip : MainRunApp.listHBTVIP) {
             listArray.add(getValues(vip));
@@ -98,7 +98,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(Habitaciones VIP) disponibles
      *return: List<String[]>
      */
-    public List<String[]> getDataHBTVIPDisponible() {
+    public static List<String[]> getDataHBTVIPDisponible() {
         List<String[]> listArray = new ArrayList<>();
         for (HabitacionVIP vip : MainRunApp.listHBTVIP) {
             if (vip.getEstado().equals("DISPONIBLE")) {
@@ -128,7 +128,7 @@ public class CtrHabitacion {
      *genera lista de habitaciones que coinciden con el formato a buscar
      *return: List<String[]>
      */
-    public List<String[]> buscarHBT(String nameColumn, Object value) {
+    public static List<String[]> buscarHBT(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
         for (Habitacion h : MainRunApp.listHBT) {
             String cl = h.toString();
@@ -137,5 +137,66 @@ public class CtrHabitacion {
             }
         }
         return listBusqueda;
+    }
+
+    /**
+     *genera lista de arrays(habitaciones VIP) que coinciden con el formato a buscar
+     *return: List<String[]>
+     */
+    public static List<String[]> buscarHBTVIP(String nameColumn, Object value) {
+        List<String[]> listBusqueda = new ArrayList<>();
+        for (HabitacionVIP h : MainRunApp.listHBTVIP) {
+            String cl = h.toString();
+            if (cl.contains(nameColumn + "=" + value)) {
+                listBusqueda.add(getValues(h));
+            }
+        }
+        return listBusqueda;
+    }
+
+    /**
+     *actualiza una habitacion
+     *return: n/a
+     */
+    public void actualizarHBT(Habitacion hbt) {
+        for (Habitacion h : MainRunApp.listHBT) {
+            if (h.getNumero().equals(hbt.getNumero())) {
+                h.setNumero(hbt.getNumero());
+                System.out.println("actualizarHBT__Precio::: " + hbt.getPrecio());
+                h.setPrecio(hbt.getPrecio());
+                h.setEstado(hbt.getEstado());
+                h.setTipo(hbt.getTipo());
+                break;
+            }
+        }
+    }
+
+    /**
+     *actualiza una habitacion VIP
+     *return: n/a
+     */
+    public void actualizarHBTVIP(HabitacionVIP vip) {
+        try {
+            for (HabitacionVIP h : MainRunApp.listHBTVIP) {
+                if (h.getNumero().equals(vip.getNumero())) {
+                    h.setNumero(vip.getNumero());
+                    h.setPrecio(vip.getPrecio());
+                    h.setEstado(vip.getEstado());
+                    h.setTipo(vip.getTipo());
+                    h.setServiciosExtras(vip.getServiciosExtras());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("No se puede actualizar usuario, por favor valide haber seleccionado un registro");
+        }
+    }
+
+    /**
+     *genera el total de habitaciones existentes
+     *return: dato numerico(suma)
+     */
+    public int cantidadHabitaciones() {
+        return MainRunApp.listHBT.size() + MainRunApp.listHBTVIP.size();
     }
 }
