@@ -7,7 +7,7 @@ import Models.Habitacion;
 import Models.HabitacionVIP;
 import Models.Huesped;
 import Models.Reserva;
-import views.VentanasSecundarias;
+import views.Index;
 
 /**
  *
@@ -19,8 +19,6 @@ public class MainRunApp {
     public static List<Huesped> listHuespeds = new ArrayList<>();
     public static List<Reserva> listReserva = new ArrayList<>();
     public static void main(String[] args) {
-        
-        VentanasSecundarias vtnSecond = new VentanasSecundarias();
-        vtnSecond.Index();
+        Index index = new Index();
     }
 }
