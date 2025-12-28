@@ -74,24 +74,7 @@ public class VentanasSecundarias {
         };
     }
 
-    public DefaultTableModel tableModel(List<String[]> data, String[] column) {
-        DefaultTableModel model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        model.addColumn("#");
-        for (String col : column) {
-            model.addColumn(col);
-        }
-
-        for (String[] obj : data) {
-            model.addRow(obj);
-        }
-
-        return model;
-    }
+    
 
     
 
@@ -229,7 +212,7 @@ public class VentanasSecundarias {
                 hbt1.setEstado("" + cbxEstado.getSelectedItem());
                 //inv.actualizarHBT(hbt1);
                 loadPnlIndex(pnl2);
-                pnl2.add(listarHabitaciones(inv, frame));
+                //pnl2.add(listarHabitaciones());
                 dialog.dispose();
             });
 
@@ -431,9 +414,9 @@ public class VentanasSecundarias {
                 hbt1.setEstado("" + cbxEstado.getSelectedItem());
                 String servicios = lblVip.getText();
                 hbt1.setServiciosExtras(servicios.substring(0, servicios.length() - 1));
-                inv.actualizarHBTVIP(hbt1);
+                // inv.actualizarHBTVIP(hbt1);
                 loadPnlIndex(pnl2);
-                pnl2.add(listarHabitacionesVIP(inv, frame));
+                // pnl2.add(listarHabitacionesVIP(inv, frame));
                 dialog.dispose();
             });
 
@@ -448,12 +431,12 @@ public class VentanasSecundarias {
 
     public void actualizarHuesped(Inventario inv, JFrame frame, JPanel pnl2, String documentoH) {
         Huesped hpd = null;
-        for (Huesped h : inv.getListHPD()) {
-            if (h.getNumDocumento().equals(Integer.valueOf(documentoH))) {
-                hpd = h;
-                break;
-            }
-        }
+        // for (Huesped h : inv.getListHPD()) {
+        //     if (h.getNumDocumento().equals(Integer.valueOf(documentoH))) {
+        //         hpd = h;
+        //         break;
+        //     }
+        // }
         JDialog dg = new JDialog(frame, true);
         dg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dg.setSize(450, 600);
@@ -504,7 +487,7 @@ public class VentanasSecundarias {
             Huesped hpd2 = new Huesped();
             hpd2.setNumDocumento(Integer.valueOf(txtDocumento.getText()));
             hpd2.setNombre(txtNombre.getText());
-            inv.actualizarHPD(hpd2);
+            // inv.actualizarHPD(hpd2);
             loadPnlIndex(pnl2);
             pnl2.add(listarHuesped(inv, frame));
             dg.dispose();

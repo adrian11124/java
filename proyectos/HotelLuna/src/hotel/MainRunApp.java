@@ -7,6 +7,7 @@ import Models.Habitacion;
 import Models.HabitacionVIP;
 import Models.Huesped;
 import Models.Reserva;
+import bd.conexion;
 import views.Index;
 
 /**

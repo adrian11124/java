@@ -56,7 +56,6 @@ public class MainApp extends javax.swing.JFrame {
         PnlContaint.removeAll();
         PnlContaint.setLayout(new BorderLayout());
         PnlContaint.add(panel);
-        PnlContaint.add(panel);
         PnlContaint.revalidate();
         PnlContaint.repaint();
     }

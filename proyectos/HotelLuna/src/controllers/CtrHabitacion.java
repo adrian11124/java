@@ -5,6 +5,7 @@ import java.util.List;
 
 import Models.Habitacion;
 import Models.HabitacionVIP;
+import bd.conexion;
 import hotel.MainRunApp;
 
 /**
@@ -30,14 +31,14 @@ public class CtrHabitacion {
      *los valores, agregados a un array
      *return: String[]
      */
-    public static String[] getValues(Object hbt) {
-        String[] habitacion = hbt.toString().split(",");
-        String h = "";
+    public static String[] getValues(Object obj) {
+        String[] habitacion = obj.toString().split(",");
+        String cadena = "";
         for (String atr : habitacion) {
             String[] value = atr.split("=");
-            h += value[1] + ",";
+            cadena += value[1] + ",";
         }
-        return h.substring(0, h.length() - 1).split(",");
+        return cadena.substring(0, cadena.length() - 1).split(",");
     }
 
     /**
@@ -59,9 +60,9 @@ public class CtrHabitacion {
      *genera una lista de arrays(habitaciones normales)
      *return: List<String[]>
      */
-    public static List<String[]> getDataHBT() {
+    public List<String[]> getDataHBT() {
         List<String[]> listArray = new ArrayList<>();
-        for (Habitacion hbt : MainRunApp.listHBT) {
+        for (Object hbt : conexion.ArrayToObject(1)) {
             listArray.add(getValues(hbt));
         }
         return listArray;
@@ -198,5 +199,15 @@ public class CtrHabitacion {
      */
     public int cantidadHabitaciones() {
         return MainRunApp.listHBT.size() + MainRunApp.listHBTVIP.size();
+    }
+
+    public String[] atributeTable(){
+        String[] atribute = {"# HABITACION",
+            "PRECIO",
+            "TIPO",
+            "ESTADO"
+        };
+
+        return atribute;
     }
 }
