@@ -151,14 +151,14 @@ public class conexion {
             List<Object>  listHabitacion = new ArrayList<>();
             String[] arrHBT = fileReadObject("archivo.txt", id_table).split("_");
             for (String registro : arrHBT) {
-                        String[] atrs = registro.split(",");
-                        Habitacion hbt = new Habitacion();
-                        hbt.setId(Integer.valueOf(atrs[0]));
-                        hbt.setNumero(atrs[1]);
-                        hbt.setPrecio(Integer.valueOf(atrs[2]));
-                        hbt.setTipo(atrs[3]);
-                        hbt.setEstado(atrs[4]);
-                        listHabitacion.add(hbt);
+                String[] atrs = registro.split(",");
+                Habitacion hbt = new Habitacion();
+                hbt.setId(Integer.valueOf(atrs[0]));
+                hbt.setNumero(atrs[1]);
+                hbt.setPrecio(Integer.valueOf(atrs[2]));
+                hbt.setTipo(atrs[3]);
+                hbt.setEstado(atrs[4]);
+                listHabitacion.add(hbt);
             }
             return listHabitacion;
 

@@ -3,7 +3,6 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,6 +21,7 @@ import controllers.CtrHabitacion;
  */
 public class ViewsHabitacion {
     private GeneryViews genery = new GeneryViews();
+    private static DefaultTableModel model = new DefaultTableModel();
     // public JPanel listarHabitacionesVIP(Inventario inventario, JFrame frame) {
     //     JPanel pnl = new JPanel(new BorderLayout());
     //     pnl.setBackground(Color.WHITE);
@@ -84,7 +84,7 @@ public class ViewsHabitacion {
         JPanel pnl_south = new JPanel(new FlowLayout());
         JTable table = new JTable();
         JScrollPane scroll = new JScrollPane();
-        DefaultTableModel model = new DefaultTableModel();
+        
         JTextField txt_buscar = new JTextField();
         JButton btn_buscar = new JButton();
         JButton btn_actualizar = new JButton();
@@ -116,11 +116,11 @@ public class ViewsHabitacion {
             }
         });
         btn_buscar.addActionListener((e) -> {
-        //     model.setRowCount(0);
-        //     for (String[] obj : CtrHabitacion.buscarHBT("numero", txt_buscar.getText())) {
-        //         model.addRow(obj);
-        //     }
-        //    btnActualizar.setEnabled(false);
+            model.setRowCount(0);
+            for (String[] obj : CtrHabitacion.buscarHBT("numero", txt_buscar.getText())) {
+                model.addRow(obj);
+            }
+           btn_actualizar.setEnabled(false);
         });
         btn_actualizar.addActionListener(e -> {
             int row = table.getSelectedRow();

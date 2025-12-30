@@ -6,6 +6,7 @@ import java.util.List;
 import Models.Habitacion;
 import Models.HabitacionVIP;
 import bd.conexion;
+import bd.cn_habitacion;
 import hotel.MainRunApp;
 
 /**
@@ -13,6 +14,8 @@ import hotel.MainRunApp;
  * @author adrian11124
  */
 public class CtrHabitacion {
+
+    private static cn_habitacion cn = new cn_habitacion();
 
     /**
      *Genera un array de habitaciones disponibles
@@ -61,12 +64,40 @@ public class CtrHabitacion {
      *return: List<String[]>
      */
     public List<String[]> getDataHBT() {
-        List<String[]> listArray = new ArrayList<>();
-        for (Object hbt : conexion.ArrayToObject(1)) {
-            listArray.add(getValues(hbt));
-        }
-        return listArray;
+        
+        int id_table = 1;
+        cn.arrayData(id_table);
+        return cn.arrayData(id_table);
     }
+
+    /**
+    *------------------------------------------------------------
+    *return: arreglo
+    */
+    public static List<Object> ArrayToObject(int id_table) {
+        try {
+            List<Object>  listHabitacion = new ArrayList<>();
+            String[] arrHBT = conexion.fileReadObject("archivo.txt", id_table).split("_");
+            for (String registro : arrHBT) {
+                String[] atrs = registro.split(",");
+                Habitacion hbt = new Habitacion();
+                hbt.setId(Integer.valueOf(atrs[0]));
+                hbt.setNumero(atrs[1]);
+                hbt.setPrecio(Integer.valueOf(atrs[2]));
+                hbt.setTipo(atrs[3]);
+                hbt.setEstado(atrs[4]);
+                listHabitacion.add(hbt);
+            }
+            return listHabitacion;
+
+        } catch (NumberFormatException e) {
+            System.out.println("No se pudo leer el archivo :: " + e);
+            return null;
+            
+        }
+    }
+
+    
 
     /**
      *genera una lista de arrays(habitaciones) disponibles
