@@ -159,7 +159,7 @@ public class CtrHabitacion {
      */
     public static List<String[]> buscarHBT(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
-        for (Habitacion h : MainRunApp.listHBT) {
+        for (Habitacion h : cn.listHabitacion()) {
             String cl = h.toString();
             if (cl.contains(nameColumn + "=" + value)) {
                 listBusqueda.add(getValues(h));

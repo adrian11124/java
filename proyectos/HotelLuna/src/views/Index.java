@@ -21,6 +21,7 @@ import javax.swing.plaf.FontUIResource;
 
 import controllers.CtrHabitacion;
 import controllers.CtrHuesped;
+import bd.conexion;
 
 /**
  *
@@ -118,7 +119,7 @@ public class Index {
             // pnl_index.add(estadistica(inventario));
         });
         item_salir.addActionListener((e) -> {
-            // inventario.guardarProceso();
+            //conexion.guardarProceso();
             frame.dispose();
         });
         

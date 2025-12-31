@@ -17,7 +17,7 @@ public class cn_habitacion {
      */
     public List<String[]> arrayData(){
         List<String[]> listArray = new ArrayList<>();
-        String[] array = conexion.fileReadObject( "archivo.txt", 1).split("_");
+        String[] array = fileReadObject();
         for (String registro : array) {
             String[] atrs = registro.split(",");
             Habitacion hbt = new Habitacion();
@@ -33,12 +33,12 @@ public class cn_habitacion {
     }
 
     /**
-     *genera una lista de arrays
-     *return: List<String[]>
+     *genera una lista de Habitacion
+     *return: List<Habitacion>
      */
-    public List<String[]> array(){
-        List<String[]> listArray = new ArrayList<>();
-        String[] array = conexion.fileReadObject( "archivo.txt", 1).split("_");
+    public List<Habitacion> listHabitacion(){
+        List<Habitacion> listArray = new ArrayList<>();
+        String[] array = fileReadObject();
         for (String registro : array) {
             String[] atrs = registro.split(",");
             Habitacion hbt = new Habitacion();
@@ -47,11 +47,18 @@ public class cn_habitacion {
             hbt.setPrecio(Integer.valueOf(atrs[2]));
             hbt.setTipo(atrs[3]);
             hbt.setEstado(atrs[4]);
-            listArray.add(getValues(hbt));
+            listArray.add(hbt);
         }
 
         return listArray;
     }
+
+
+    public String[] fileReadObject(){
+        String[] array = conexion.fileReadObject( "archivo.txt", 1).split("_");
+        return array;
+    }
+   
 
     /**
     * genera un array

@@ -12,7 +12,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Models.Habitacion;
 import controllers.CtrHabitacion;
+import hotel.MainRunApp;
 
 
 /**
@@ -123,9 +125,9 @@ public class ViewsHabitacion {
            btn_actualizar.setEnabled(false);
         });
         btn_actualizar.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            table.getRowHeight(row);
-            // actualizarHBT(inventario, frame, "" + table.getValueAt(row, 1), pnl);
+            // int row = table.getSelectedRow();
+            // table.getRowHeight(row);
+            // CtrHabitacion.actualizarHBT( "" + table.getValueAt(row, 1));
         });
 
         

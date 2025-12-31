@@ -206,22 +206,5 @@ public class conexion {
             System.out.println("No se pudo guardar proceso en documento en texto");
         }
     }
-
-    public static void main(String[] args) {
-        
-        String[] maca = fileRead("archivo.txt");
-        String max = fileReadObject("archivo.txt", 1);
-        List<Object> mi = ArrayToObject(1);
-        System.out.println("mina:: "+max);
-        CtrHabitacion pass = new CtrHabitacion();
-        for(Object h: mi){
-            for (String string : pass.getValues(h)) {
-                System.out.println(string);
-            }
-        }
-        // for (String string : maca) {
-        //     System.out.println(string);
-        // }
-
-    }
+    
 }
