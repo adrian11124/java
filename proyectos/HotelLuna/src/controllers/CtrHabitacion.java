@@ -63,11 +63,8 @@ public class CtrHabitacion {
      *genera una lista de arrays(habitaciones normales)
      *return: List<String[]>
      */
-    public List<String[]> getDataHBT() {
-        
-        int id_table = 1;
-        cn.arrayData(id_table);
-        return cn.arrayData(id_table);
+    public List<String[]> getDataHBT() {  
+        return cn.arrayData();
     }
 
     /**
