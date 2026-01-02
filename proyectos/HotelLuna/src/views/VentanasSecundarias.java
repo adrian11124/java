@@ -499,8 +499,8 @@ public class VentanasSecundarias {
     }
 
     private void reservarHabitacion(Inventario inv, JFrame frame) {
-        JReservar r = new JReservar();
-        r.dialog1(inv, frame);
+        // JReservar r = new JReservar();
+        // r.dialog1(inv, frame);
     }
 
     private JPanel listarHuesped(Inventario inv, JFrame frame) {

@@ -12,10 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Models.Habitacion;
 import controllers.CtrHabitacion;
-import hotel.MainRunApp;
-
 
 /**
  *
@@ -24,57 +21,64 @@ import hotel.MainRunApp;
 public class ViewsHabitacion {
     private GeneryViews genery = new GeneryViews();
     private static DefaultTableModel model = new DefaultTableModel();
-    // public JPanel listarHabitacionesVIP(Inventario inventario, JFrame frame) {
-    //     JPanel pnl = new JPanel(new BorderLayout());
-    //     pnl.setBackground(Color.WHITE);
+    public JPanel listarHabitacionesVIP() {
 
-    //     String[] columnTable = {"# HABITACION",
-    //         "PRECIO",
-    //         "TIPO",
-    //         "ESTADO",
-    //         "VIP"};
-    //     DefaultTableModel model = tableModel(CtrHabitacion.getDataHBTVIP(), columnTable);
-    //     JTable table = new JTable(model);
-    //     JScrollPane scroll = new JScrollPane(table);
-    //     table.setFocusable(false);
-    //     table.setBackground(Color.WHITE);
+        JPanel pnl = new JPanel();
+        JPanel pnl_buscar = new JPanel();
+        JPanel pnlBtn = new JPanel();
+        JScrollPane scroll = new JScrollPane();
+        JTable table = new JTable();
+        DefaultTableModel model;
+        JTextField txt_buscar = new JTextField();
+        JButton btn_buscar = new JButton();
+        JButton btn_actualizar = new JButton();
+        JLabel lbl_cantHbt = new JLabel();
 
-    //     JPanel pnl_buscar = new JPanel();
-    //     pnl_buscar.setBackground(Color.WHITE);
-    //     JTextField txt_buscar = new JTextField(30);
-    //     JButton btnBuscar = new JButton("BUSCAR");
-    //     btnBuscar.setFocusable(false);
-    //     pnl_buscar.add(txt_buscar);
-    //     pnl_buscar.add(btnBuscar);
-    //     JButton btnActualizar = new JButton("ACTUALIZAR");
-    //     btnActualizar.setFocusable(false);
-    //     btnActualizar.setEnabled(false);
-    //     pnl_buscar.add(new JLabel("CANTIDAD HABITACIONES: " + inventario.getDataHBTVIP().size()));
-    //     btnBuscar.addActionListener((e) -> {
-    //         model.setRowCount(0);
-    //         for (String[] obj : inventario.buscarHBTVIP("numero", txt_buscar.getText())) {
-    //             model.addRow(obj);
-    //         }
-    //         btnActualizar.setEnabled(false);
-    //     });
+        CtrHabitacion ctr = new CtrHabitacion();    
+        model = genery.tableModel(ctr.getDataHBT(), ctr.atributeTable());
 
-    //     JPanel pnlBtn = new JPanel(new FlowLayout());
+        pnlBtn.setLayout(new FlowLayout());
+        btn_actualizar.setText("ACTUALIZAR");
+        btn_buscar.setText("BUSCAR");
+        pnl.setBackground(Color.WHITE);
+        pnl.setLayout(new BorderLayout());
+        table.setModel(model);
+        scroll.setViewportView(table);
+        table.setFocusable(false);
+        table.setBackground(Color.WHITE);
+        pnl_buscar.setBackground(Color.WHITE);
+        txt_buscar.setColumns(30);
+        btn_buscar.setFocusable(false);
+        lbl_cantHbt.setText(null);
+        btn_actualizar.setFocusable(false);
+        btn_actualizar.setEnabled(false);
         
-    //     table.getSelectionModel().addListSelectionListener(e -> {
-    //         if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
-    //             btnActualizar.setEnabled(true);
-    //         }
-    //     });
-    //     pnlBtn.add(btnActualizar);
-    //     btnActualizar.addActionListener(e -> {
-    //         int row = table.getSelectedRow();
-    //         // actualizarHBTVIP(inventario, frame, "" + table.getValueAt(row, 1), pnl);
-    //     });
-    //     pnl.add(pnl_buscar, BorderLayout.NORTH);
-    //     pnl.add(scroll, BorderLayout.CENTER);
-    //     pnl.add(pnlBtn, BorderLayout.SOUTH);
-    //     return pnl;
-    // }
+        btn_buscar.addActionListener((e) -> {
+            model.setRowCount(0);
+            for (String[] obj : CtrHabitacion.buscarHBTVIP("numero", txt_buscar.getText())) {
+                model.addRow(obj);
+            }
+            btn_actualizar.setEnabled(false);
+        });
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+                btn_actualizar.setEnabled(true);
+            }
+        });
+        btn_actualizar.addActionListener(e -> {
+            String data = "";
+            ctr.actualizarHBTVIP(data);
+        });
+        
+        pnl_buscar.add(txt_buscar);
+        pnl_buscar.add(btn_buscar);
+        pnl_buscar.add(lbl_cantHbt);
+        pnl.add(pnl_buscar, BorderLayout.NORTH);
+        pnl.add(scroll, BorderLayout.CENTER);
+        pnl.add(pnlBtn, BorderLayout.SOUTH);
+
+        return pnl;
+    }
 
 
     /**
@@ -125,11 +129,9 @@ public class ViewsHabitacion {
            btn_actualizar.setEnabled(false);
         });
         btn_actualizar.addActionListener(e -> {
-            // int row = table.getSelectedRow();
-            // table.getRowHeight(row);
-            // CtrHabitacion.actualizarHBT( "" + table.getValueAt(row, 1));
+            String[] arrayDataNew = new String[5];
+            CtrHabitacion.actualizarHBT(arrayDataNew);
         });
-
         
         pnl_buscar.add(cant_habitaciones);
         pnl_south.add(btn_actualizar);

@@ -64,7 +64,27 @@ public class CtrHabitacion {
      *return: List<String[]>
      */
     public List<String[]> getDataHBT() {  
-        return cn.arrayData();
+        return arrayData();
+    }
+
+    /**
+     *genera una lista de habitaciones(habitaciones normales)
+     *return: List<Habitacion>
+     */
+    public List<Habitacion> listHabitacion(){
+        return MainRunApp.listHBT;
+    }
+
+    /**
+     *genera una lista de arrays
+     *return: List<String[]>
+     */
+    public List<String[]> arrayData(){
+        List<String[]> listArray = new ArrayList<>();
+        for (Habitacion registro : listHabitacion()) {
+            listArray.add(getValues(registro));
+        }
+        return listArray;
     }
 
     /**
@@ -187,38 +207,16 @@ public class CtrHabitacion {
      *actualiza una habitacion
      *return: n/a
      */
-    public void actualizarHBT(Habitacion hbt) {
-        for (Habitacion h : MainRunApp.listHBT) {
-            if (h.getNumero().equals(hbt.getNumero())) {
-                h.setNumero(hbt.getNumero());
-                System.out.println("actualizarHBT__Precio::: " + hbt.getPrecio());
-                h.setPrecio(hbt.getPrecio());
-                h.setEstado(hbt.getEstado());
-                h.setTipo(hbt.getTipo());
-                break;
-            }
-        }
+    public static void actualizarHBT(String[] arrayHbt) {
+        
     }
 
     /**
      *actualiza una habitacion VIP
      *return: n/a
      */
-    public void actualizarHBTVIP(HabitacionVIP vip) {
-        try {
-            for (HabitacionVIP h : MainRunApp.listHBTVIP) {
-                if (h.getNumero().equals(vip.getNumero())) {
-                    h.setNumero(vip.getNumero());
-                    h.setPrecio(vip.getPrecio());
-                    h.setEstado(vip.getEstado());
-                    h.setTipo(vip.getTipo());
-                    h.setServiciosExtras(vip.getServiciosExtras());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("No se puede actualizar usuario, por favor valide haber seleccionado un registro");
-        }
+    public void actualizarHBTVIP(String data) {
+         
     }
 
     /**
@@ -229,6 +227,10 @@ public class CtrHabitacion {
         return MainRunApp.listHBT.size() + MainRunApp.listHBTVIP.size();
     }
 
+    /**
+     *genera un array con los atributos del modelo
+     *return: String[]
+     */
     public String[] atributeTable(){
         String[] atribute = {"# HABITACION",
             "PRECIO",

@@ -120,4 +120,17 @@ public class CtrReserva {
             System.out.println("No se puede actualizar usuario, por favor valide haber seleccionado un registro");
         }
     }
+
+    /**
+     *genera un array con los atributos del modelo
+     *return: String[]
+     */
+    public String[] atributeTable(){
+        String[] atribute = {
+                            "NUMERO HABITACION", "DOCUMENTO HUESPED", 
+                            "NOMBRE HUESPED", "FECHA INGRESO", "FECHA SALIDA", "VIP"
+                        };
+
+        return atribute;
+    }
 }

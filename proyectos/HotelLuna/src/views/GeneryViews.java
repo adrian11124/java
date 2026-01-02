@@ -39,7 +39,7 @@ public class GeneryViews {
      * status: active
      *descripcion: permite visulizar un nuevo panel
      */
-    public static void ajustarNewPanel(JPanel PnlContaint, JPanel panel){
+    public void ajustarNewPanel(JPanel PnlContaint, JPanel panel){
         PnlContaint.removeAll();
         PnlContaint.setLayout(new GridLayout(1, 1));
         PnlContaint.add(panel);

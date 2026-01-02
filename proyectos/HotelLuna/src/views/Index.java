@@ -91,29 +91,33 @@ public class Index {
         menu_reserva.setText("RESERVA");
         item_listarReserva.setText("LISTAR RESERVAS");
 
+        GeneryViews genery = new GeneryViews();
         item_inicio.addActionListener((ActionEvent e) -> {
-            GeneryViews.ajustarNewPanel(pnl_index, pnl_indexLogo);
+            genery.ajustarNewPanel(pnl_index, pnl_indexLogo);
         });
         item_listaHabitacion.addActionListener((ActionEvent e) -> {
             ViewsHabitacion views = new ViewsHabitacion();
             JPanel pnl_new = views.listarHabitaciones();
-            GeneryViews.ajustarNewPanel(pnl_index, pnl_new);
+            genery.ajustarNewPanel(pnl_index, pnl_new);
         });
         item_listaHabitacionVIP.addActionListener((ActionEvent e) -> {
-            loadPnl_index(pnl_index);
-            // pnl_index.add(listarHabitacionesVIP(inventario, frame));
+            ViewsHabitacion views = new ViewsHabitacion();
+            JPanel pnl_new = views.listarHabitacionesVIP();
+            genery.ajustarNewPanel(pnl_index, pnl_new);
         });
         item_reservarHabitacion.addActionListener((ActionEvent e) -> {
-            // reservarHabitacion(inventario, frame);
-        });
-        item_listarHuesped.addActionListener((e) -> {
-            loadPnl_index(pnl_index);
-            // pnl_index.add(listarHuesped(inventario, frame));
+            ViewsReserva views = new ViewsReserva();
+            views.reservarHabitacion(frame);
         });
         item_listarReserva.addActionListener((e) -> {
             loadPnl_index(pnl_index);
             // pnl_index.add(listarReserva(inventario, frame));
         });
+        item_listarHuesped.addActionListener((e) -> {
+            loadPnl_index(pnl_index);
+            // pnl_index.add(listarHuesped(inventario, frame));
+        });
+        
         item_estadistica.addActionListener((e) -> {
             loadPnl_index(pnl_index);
             // pnl_index.add(estadistica(inventario));
