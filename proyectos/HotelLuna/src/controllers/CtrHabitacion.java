@@ -120,7 +120,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(habitaciones) disponibles
      *return: List<String[]>
      */
-    public static List<String[]> getDataHBTDisponible() {
+    public List<String[]> getDataHBTDisponible() {
         List<String[]> listArray = new ArrayList<>();
         for (Habitacion hbt : MainRunApp.listHBT) {
             if (hbt.getEstado().equals("DISPONIBLE")) {
@@ -147,7 +147,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(Habitaciones VIP) disponibles
      *return: List<String[]>
      */
-    public static List<String[]> getDataHBTVIPDisponible() {
+    public List<String[]> getDataHBTVIPDisponible() {
         List<String[]> listArray = new ArrayList<>();
         for (HabitacionVIP vip : MainRunApp.listHBTVIP) {
             if (vip.getEstado().equals("DISPONIBLE")) {
@@ -177,7 +177,7 @@ public class CtrHabitacion {
      *genera lista de habitaciones que coinciden con el formato a buscar
      *return: List<String[]>
      */
-    public static List<String[]> buscarHBT(String nameColumn, Object value) {
+    public List<String[]> buscarHBT(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
         for (Habitacion h : cn.listHabitacion()) {
             String cl = h.toString();

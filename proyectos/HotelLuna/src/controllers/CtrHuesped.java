@@ -65,7 +65,7 @@ public class CtrHuesped {
     *genera lista de arrays(datos de huespes) 
     *return: List<String[]> 
     */
-    public static List<String[]> getDataHPD() {
+    public List<String[]> getDataHPD() {
         List<String[]> listArray = new ArrayList<>();
         for (Huesped hbt : MainRunApp.listHuespeds) {
             listArray.add(getValuesHPD(hbt));
@@ -139,5 +139,15 @@ public class CtrHuesped {
      */
     public int cantidadHuesped() {
         return MainRunApp.listHuespeds.size();
+    }
+
+    /**
+     *genera un array con los atributos del modelo
+     *return: String[]
+     */
+    public String[] atributeTable(){
+        String[] atribute = {"DOCUMENTO", "NOMBRE"};
+
+        return atribute;
     }
 }

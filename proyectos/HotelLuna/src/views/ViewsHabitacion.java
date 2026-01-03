@@ -25,7 +25,7 @@ public class ViewsHabitacion {
 
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
-        JPanel pnlBtn = new JPanel();
+        JPanel pnl_south = new JPanel();
         JScrollPane scroll = new JScrollPane();
         JTable table = new JTable();
         DefaultTableModel model;
@@ -37,7 +37,7 @@ public class ViewsHabitacion {
         CtrHabitacion ctr = new CtrHabitacion();    
         model = genery.tableModel(ctr.getDataHBT(), ctr.atributeTable());
 
-        pnlBtn.setLayout(new FlowLayout());
+        pnl_south.setLayout(new FlowLayout());
         btn_actualizar.setText("ACTUALIZAR");
         btn_buscar.setText("BUSCAR");
         pnl.setBackground(Color.WHITE);
@@ -70,12 +70,13 @@ public class ViewsHabitacion {
             ctr.actualizarHBTVIP(data);
         });
         
+        pnl_south.add(btn_actualizar);
         pnl_buscar.add(txt_buscar);
         pnl_buscar.add(btn_buscar);
         pnl_buscar.add(lbl_cantHbt);
         pnl.add(pnl_buscar, BorderLayout.NORTH);
         pnl.add(scroll, BorderLayout.CENTER);
-        pnl.add(pnlBtn, BorderLayout.SOUTH);
+        pnl.add(pnl_south, BorderLayout.SOUTH);
 
         return pnl;
     }
@@ -87,7 +88,7 @@ public class ViewsHabitacion {
     public JPanel listarHabitaciones() {
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
-        JPanel pnl_south = new JPanel(new FlowLayout());
+        JPanel pnl_south = new JPanel();
         JTable table = new JTable();
         JScrollPane scroll = new JScrollPane();
         
