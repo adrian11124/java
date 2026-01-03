@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,10 @@ public class ViewsReserva {
 
     private GeneryViews genery = new GeneryViews();
 
-    private JPanel listarReserva() {
+    /**
+     *Vista de todas las reservas generadas
+     */
+    public JPanel listarReserva() {
         CtrReserva ctr = new CtrReserva();
 
         JPanel pnl = new JPanel();
@@ -94,7 +98,10 @@ public class ViewsReserva {
         JButton btn_siguiente = new JButton();
         JButton btn_cancelar = new JButton();
 
-        
+        CtrHuesped ctr = new CtrHuesped();
+        List<String> datosHuesped = new ArrayList<>();
+        model = genery.tableModel(ctr.getDataHPD(), ctr.atributeTable());
+
         dialog1.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dialog1.setSize(550, 700);
         dialog1.setLayout(new BorderLayout());
@@ -111,13 +118,9 @@ public class ViewsReserva {
         btn_cancelar.setText("CANCELAR");
         btn_cancelar.setFocusable(false);
 
-        CtrHuesped ctr = new CtrHuesped();
-        List<String> datosHuesped = new ArrayList<>();
-        model = genery.tableModel(ctr.getDataHPD(), ctr.atributeTable());
-        
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : CtrHuesped.buscarHPD("numDocumento", txt_buscar.getText())) {
+            for (String[] obj : ctr.buscarHPD("numDocumento", txt_buscar.getText())) {
                 model.addRow(obj);
             }
             btn_siguiente.setEnabled(false);
@@ -161,14 +164,14 @@ public class ViewsReserva {
         JButton btn_buscar = new JButton();
         JButton btn_siguiente = new JButton();
         JButton btn_cancelar = new JButton();
-
+        CtrHabitacion ctr = new CtrHabitacion();
 
         dialog2.setSize(550, 700);
         dialog2.setLayout(new BorderLayout());
         dialog2.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         pnl_buscar.setLayout(new FlowLayout());
         scroll.setViewportView(tbl_table);
-        tbl_table.setModel(model);
+        
         tbl_table.setFocusable(false);
         txt_buscar.setColumns(20);
         btn_buscar.setText("BUSCAR");
@@ -182,7 +185,7 @@ public class ViewsReserva {
         int opcion = JOptionPane.showConfirmDialog(null, "¿Es HABITACION VIP?", "TIPO HABITACION", JOptionPane.YES_NO_OPTION);
         boolean esVIP = (opcion == JOptionPane.YES_OPTION);
         
-        CtrHabitacion ctr = new CtrHabitacion();
+        
         if (esVIP) {
             model = genery.tableModel(ctr.getDataHBTVIPDisponible(), ctr.atributeTable());
             btn_buscar.addActionListener((e) -> {
@@ -203,7 +206,7 @@ public class ViewsReserva {
                 btn_siguiente.setEnabled(false);
             });
             data.setText(data.getText()+",NO");
-        }
+        }tbl_table.setModel(model);
 
         tbl_table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tbl_table.getSelectedRow() != -1) {
@@ -234,51 +237,40 @@ public class ViewsReserva {
     public void mostrarDialog3(JTextField data, JFrame frame) {
         JDialog dialog3 = new JDialog(frame, true);
         
+        JComboBox cbx_diaIngreso = new JComboBox<>(dataFecha(1, 30)); 
+        JComboBox cbx_mesIngreso  = new JComboBox<>(dataFecha(1, 12));
+        JComboBox cbx_anioIngreso = new JComboBox<>(dataFecha(2025, 2027)); 
+        JComboBox cbx_diaSalida = new JComboBox<>(dataFecha(1, 30));
+        JComboBox cbx_mesSalida = new JComboBox<>(dataFecha(1, 12));; 
+        JComboBox cbx_anioSalida = new JComboBox<>(dataFecha(2025, 2027)); 
         JPanel pnl_fechaIngreso = new JPanel();
+        JPanel pnl_fechaSalida = new JPanel();
         JLabel lbl_ingreso = new JLabel();
-        pnl_fechaIngreso.setLayout(new FlowLayout());
-        lbl_ingreso.setText("Fecha Ingreso:");
+        JLabel lbl_salida = new JLabel();
+        JButton btn_generar = new JButton();
+        JButton btn_cancelar = new JButton();
+        GridBagConstraints gbc;
+        CtrReserva ctr = new CtrReserva();
+
         dialog3.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dialog3.setSize(550, 700);
-
         dialog3.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        
-        
-        JComboBox cbxDiaIngreso = new JComboBox<>(dataFecha(1, 30));
-        JComboBox cbxMesIngreso = new JComboBox<>(dataFecha(1, 12));
-        JComboBox cbxAnioIngreso = new JComboBox<>(dataFecha(2025, 2027));
-        cbxDiaIngreso.setFocusable(false);
-        cbxMesIngreso.setFocusable(false);
-        cbxAnioIngreso.setFocusable(false);
-        pnl_fechaIngreso.add(cbxDiaIngreso);
-        pnl_fechaIngreso.add(new JLabel("/"));
-        pnl_fechaIngreso.add(cbxMesIngreso);
-        pnl_fechaIngreso.add(new JLabel("/"));
-        pnl_fechaIngreso.add(cbxAnioIngreso);
-        JLabel lblSalida = new JLabel("Fecha Salida:");
-        JPanel pnlFechaSalida = new JPanel(new FlowLayout());
-        JComboBox cbxDiaSalida = new JComboBox<>(dataFecha(1, 30));
-        JComboBox cbxMesSalida = new JComboBox<>(dataFecha(1, 12));
-        JComboBox cbxAnioSalida = new JComboBox<>(dataFecha(2025, 2027));
-        cbxDiaSalida.setFocusable(false);
-        cbxMesSalida.setFocusable(false);
-        cbxAnioSalida.setFocusable(false);
-        pnlFechaSalida.add(cbxDiaSalida);
-        pnlFechaSalida.add(new JLabel("/"));
-        pnlFechaSalida.add(cbxMesSalida);
-        pnlFechaSalida.add(new JLabel("/"));
-        pnlFechaSalida.add(cbxAnioSalida);
-        JButton btnGenerar = new JButton("GENERAR RESERVA");
-        JButton btn_cancelar = new JButton("CANCELAR");
-        btnGenerar.setFocusable(false);
+        gbc = new GridBagConstraints();
+        pnl_fechaIngreso.setLayout(new FlowLayout());
+        pnl_fechaSalida.setLayout(new FlowLayout());
+        lbl_ingreso.setText("Fecha Ingreso:");
+        lbl_salida.setText("Fecha Salida:");
+        btn_generar.setText("GENERAR RESERVA");
+        btn_cancelar.setText("CANCELAR");
+        btn_generar.setFocusable(false);
         btn_cancelar.setFocusable(false);
-        
-        
-        btn_cancelar.addActionListener((e) -> {
-            dialog3.dispose();
-        });
+        cbx_diaIngreso.setFocusable(false);
+        cbx_mesIngreso.setFocusable(false);
+        cbx_anioIngreso.setFocusable(false);
+        cbx_diaSalida.setFocusable(false);
+        cbx_mesSalida.setFocusable(false);
+        cbx_anioSalida.setFocusable(false);
+
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
@@ -288,9 +280,9 @@ public class ViewsReserva {
         dialog3.add(pnl_fechaIngreso, gbc);
         gbc.gridy = 1;
         gbc.gridx = 0;
-        dialog3.add(lblSalida, gbc);
+        dialog3.add(lbl_salida, gbc);
         gbc.gridx = 1;
-        dialog3.add(pnlFechaSalida, gbc);
+        dialog3.add(pnl_fechaSalida, gbc);
         gbc.gridy = 2;
         gbc.gridx = 0;
         dialog3.add(new JLabel("Formato fecha(dd/MM/YYYY)"), gbc);
@@ -298,17 +290,35 @@ public class ViewsReserva {
         gbc.gridx = 0;
         dialog3.add(btn_cancelar, gbc);
         gbc.gridx = 1;
-        dialog3.add(btnGenerar, gbc);
+        dialog3.add(btn_generar, gbc);
 
-        btnGenerar.addActionListener(e -> {
-            datosHuesped.add(cbxDiaIngreso.getSelectedItem() + "/" + cbxMesIngreso.getSelectedItem()
-                    + "/" + cbxAnioIngreso.getSelectedItem());
-            datosHuesped.add(cbxDiaSalida.getSelectedItem() + "/" + cbxMesSalida.getSelectedItem()
-                    + "/" + cbxAnioSalida.getSelectedItem());
+        btn_generar.addActionListener(e -> {
+            data.setText(
+                    data.getText()+","+
+                       cbx_diaIngreso.getSelectedItem() + "/" 
+                     + cbx_mesIngreso.getSelectedItem()
+                     + "/" + cbx_anioIngreso.getSelectedItem()
+                     +","+
+                       cbx_diaSalida.getSelectedItem() + "/" 
+                     + cbx_mesSalida.getSelectedItem()+ "/" 
+                     + cbx_anioSalida.getSelectedItem()
+                    );;
 
-            CtrReserva.generarReserva(datosHuesped);
+            ctr.generarReserva(data.getText());
             dialog3.dispose();
         });
+        btn_cancelar.addActionListener((e) -> dialog3.dispose());
+
+        pnl_fechaIngreso.add(cbx_diaIngreso);
+        pnl_fechaIngreso.add(new JLabel("/"));
+        pnl_fechaIngreso.add(cbx_mesIngreso);
+        pnl_fechaIngreso.add(new JLabel("/"));
+        pnl_fechaIngreso.add(cbx_anioIngreso);
+        pnl_fechaSalida.add(cbx_diaSalida);
+        pnl_fechaSalida.add(new JLabel("/"));
+        pnl_fechaSalida.add(cbx_mesSalida);
+        pnl_fechaSalida.add(new JLabel("/"));
+        pnl_fechaSalida.add(cbx_anioSalida);
         dialog3.setVisible(true);
     }
 

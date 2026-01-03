@@ -43,15 +43,17 @@ public class CtrReserva {
      *genera reserva de 
      *return: n/a
      */
-    public static void generarReserva(List<String> datosHuesped) {
+    public void generarReserva(String data) {
         Reserva r = new Reserva();
+        String[] array_data = data.split(",");
+
         r.setId(cantidadRSV() + 1);
-        r.setHuesped(datosHuesped.get(0));
-        r.setNombreHuesped(datosHuesped.get(1));
-        r.setVip(datosHuesped.get(2));
-        r.setNumHabitacion(datosHuesped.get(3));
-        r.setFechaIngreso(datosHuesped.get(4));
-        r.setFechaSalida(datosHuesped.get(5));
+        r.setHuesped(array_data[0]);
+        r.setNombreHuesped(array_data[1]);
+        r.setVip(array_data[2]);
+        r.setNumHabitacion(array_data[3]);
+        r.setFechaIngreso(array_data[4]);
+        r.setFechaSalida(array_data[5]);
         reservarHabitacion(r);
         if (r.getVip().equals("SI")) {
             for (Habitacion hbt : MainRunApp.listHBTVIP) {

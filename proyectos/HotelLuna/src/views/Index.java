@@ -34,7 +34,7 @@ public class Index {
      */
     public Index() {
 
-        JFrame frame = new JFrame();
+        JFrame frame = jfFrame();
         JPanel pnl_index = new JPanel();
         JPanel pnl_indexLogo = new JPanel();
         JPanel pnl_indexImg = new JPanel();
@@ -110,16 +110,18 @@ public class Index {
             views.reservarHabitacion(frame);
         });
         item_listarReserva.addActionListener((e) -> {
-            loadPnl_index(pnl_index);
-            // pnl_index.add(listarReserva(inventario, frame));
+            ViewsReserva views = new ViewsReserva();
+            JPanel pnl_new = views.listarReserva();
+            genery.ajustarNewPanel(pnl_index, pnl_new);
         });
         item_listarHuesped.addActionListener((e) -> {
-            loadPnl_index(pnl_index);
+            ViewsHuesped views = new ViewsHuesped();
+            JPanel pnl_new = views.listarHuesped();
+            genery.ajustarNewPanel(pnl_index, pnl_new);
             // pnl_index.add(listarHuesped(inventario, frame));
         });
         
         item_estadistica.addActionListener((e) -> {
-            loadPnl_index(pnl_index);
             // pnl_index.add(estadistica(inventario));
         });
         item_salir.addActionListener((e) -> {
@@ -156,10 +158,9 @@ public class Index {
         frame.setVisible(true);
     }
 
-    public void loadPnl_index(JPanel pnl) {
-        pnl.setVisible(false);
-        pnl.removeAll();
-        pnl.setVisible(true);
+    public static JFrame jfFrame() {
+        JFrame frame = new JFrame();
+        return frame;
     }
 
     

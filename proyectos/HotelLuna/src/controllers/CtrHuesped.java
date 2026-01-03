@@ -77,7 +77,7 @@ public class CtrHuesped {
     *genera lista de arrays(datos de huespes) 
     *return: List<String[]> 
     */
-    public static List<String[]> buscarHPD(String nameColumn, Object value) {
+    public List<String[]> buscarHPD(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
         for (Huesped h : MainRunApp.listHuespeds) {
             String cl = h.toString();
