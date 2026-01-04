@@ -47,6 +47,7 @@ public class GeneryViews {
         PnlContaint.repaint();
     }
 
+
     /**
      * status: inactive
      * descripcion: permite visulizar un nuevo panel

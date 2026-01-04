@@ -43,16 +43,9 @@ import javax.swing.KeyStroke;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
-import Models.Habitacion;
-import Models.HabitacionVIP;
 import Models.Huesped;
-import bd.conexion;
-import controllers.CtrHabitacion;
 import controllers.CtrHuesped;
-import controllers.Inventario;
 
-import controllers.CtrHuesped;
-import controllers.Inventario;
 
 /**
  *
@@ -62,11 +55,11 @@ public class ViewsHuesped {
 
     private GeneryViews genery = new GeneryViews();
 
-    public JPanel listarHuesped() {
+    public JPanel listarHuesped() { 
         JPanel pnl = new JPanel();
         JPanel pnl_south = new JPanel();
         JPanel pnl_buscar = new JPanel();
-        JTable table = new JTable();
+        JTable tbl_table = new JTable();
         CtrHuesped ctr = new CtrHuesped();
         JTextField txt_buscar = new JTextField();
         JButton btn_buscar = new JButton();
@@ -80,7 +73,7 @@ public class ViewsHuesped {
         pnl.setBackground(Color.WHITE);
         pnl_south.setLayout(new FlowLayout());
         pnl_buscar.setLayout(new FlowLayout());
-        table.setFocusable(false);
+        tbl_table.setFocusable(false);
         txt_buscar.setColumns(30);
         btn_buscar.setText("BUSCAR");
         btn_buscar.setFocusable(false);
@@ -92,12 +85,26 @@ public class ViewsHuesped {
         btn_registrar.setFocusable(false);
         btn_actualizar.setFocusable(false);
         btn_actualizar.setEnabled(false);
-        table.setModel(model);
-        scroll.setViewportView(table);
-        
-        
-        
-        
+        tbl_table.setModel(model);
+        scroll.setViewportView(tbl_table);
+
+        btn_registrar.addActionListener((e) -> {
+            registrarHuesped(pnl);
+        });
+        btn_actualizar.addActionListener((e) -> {
+            int row = tbl_table.getSelectedRow();
+            actualizarHuesped(pnl, tbl_table.getValueAt(row, 1) + "");
+        });
+        btn_eliminar.addActionListener((e) -> {
+            int row = tbl_table.getSelectedRow();
+            int opcion = JOptionPane.showConfirmDialog(null, "¿Desea Eliminar Huesped?", "CONFIRMACION", JOptionPane.YES_NO_OPTION);
+            boolean op = (opcion == JOptionPane.YES_OPTION);
+            if(op){
+                ctr.removeHPD(tbl_table.getValueAt(row, 1).toString());
+                genery.ajustarNewPanel(pnl, listarHuesped());
+            }
+            
+        });
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
             for (String[] obj : ctr.buscarHPD("numDocumento", txt_buscar.getText())) {
@@ -106,36 +113,18 @@ public class ViewsHuesped {
             btn_actualizar.setEnabled(false);
             btn_eliminar.setEnabled(false);
         });
-        table.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+        tbl_table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tbl_table.getSelectedRow() != -1) {
                 btn_actualizar.setEnabled(true);
                 btn_eliminar.setEnabled(true);
             }
         });
-        
+
         pnl_buscar.add(txt_buscar);
         pnl_buscar.add(btn_buscar);
         pnl_south.add(btn_registrar);
         pnl_south.add(btn_actualizar);
         pnl_south.add(btn_eliminar);
-        btn_registrar.addActionListener((e) -> {
-            registrarHuesped();
-        });
-        btn_actualizar.addActionListener((e) -> {
-            int row = table.getSelectedRow();
-            actualizarHuesped(table.getValueAt(row, 1) + "");
-        });
-        btn_eliminar.addActionListener((e) -> {
-            int row = table.getSelectedRow();
-            int opcion = JOptionPane.showConfirmDialog(null, "¿Desea Eliminar Huesped?", "CONFIRMACION", JOptionPane.YES_NO_OPTION);
-            boolean op = (opcion == JOptionPane.YES_OPTION);
-            if(op){
-                ctr.removeHPD(table.getValueAt(row, 1).toString());
-                loadPnlIndex(pnl);
-                pnl.add(listarHuesped());
-            }
-            
-        });
         pnl.add(pnl_buscar, BorderLayout.NORTH);
         pnl.add(scroll, BorderLayout.CENTER);
         pnl.add(pnl_south, BorderLayout.SOUTH);
@@ -143,133 +132,140 @@ public class ViewsHuesped {
         return pnl;
     }
 
-    public void registrarHuesped() {
+    public void registrarHuesped(JPanel pnl_origin) {
         JFrame frame = Index.jfFrame();
         JDialog dg = new JDialog(frame, true);
+        JPanel pnl = new JPanel();
+        JLabel lbl_message = new JLabel();
+        JLabel lbl_title = new JLabel();
+        JTextField txt_documento = new JTextField(20);
+        JTextField txt_nombre = new JTextField(20);
+        JButton btn_registrar = new JButton();
+        JButton btn_cancelar = new JButton();
+        GridBagConstraints gbc = new GridBagConstraints();
+        CtrHuesped ctr = new CtrHuesped();
+        
         dg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dg.setSize(450, 600);
-        JPanel pnl = new JPanel(new GridBagLayout());
-        dg.add(pnl);
-        GridBagConstraints gbc = new GridBagConstraints();
+        pnl.setLayout(new GridBagLayout());
+        pnl.setBackground(Color.WHITE);
+        txt_documento.setColumns(20);
+        txt_nombre.setColumns(20);
+        btn_registrar.setText("REGISTRAR");
+        btn_registrar.setFocusable(false);
+        btn_cancelar.setText("CANCELAR");
+        btn_cancelar.setFocusable(false);
+        lbl_title.setText("FORMULARIO REGISTRO DE HUESPED ");
+        
         gbc.gridwidth = 2;
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-        pnl.setBackground(Color.WHITE);
-        pnl.add(new JLabel("FORMULARIO DE REGISTRO DE HUESPED "), gbc);
+        pnl.add(lbl_title, gbc);
         gbc.gridy = 3;
-        gbc.gridx = 0;
-        JLabel lblMessage = new JLabel();
-        pnl.add(lblMessage, gbc);
-        JTextField txtDocumento = new JTextField(20);
-        txtDocumento.addKeyListener(txtKeyListenerNumber());
-        JTextField txtNombre = new JTextField(20);
-        txtNombre.addKeyListener(txtKeyListenerChar());
-        JButton btnCancelar = new JButton("CANCELAR");
-        JButton btn_registrar = new JButton("REGISTRAR");
-        btnCancelar.setFocusable(false);
-        btn_registrar.setFocusable(false);
-
+        gbc.gridx = 0; 
+        pnl.add(lbl_message, gbc);
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         pnl.add(new JLabel("# DOCUMENTO: "), gbc);
-
         gbc.gridx = 1;
-        pnl.add(txtDocumento, gbc);
+        pnl.add(txt_documento, gbc);
         gbc.gridy = 2;
         gbc.gridx = 0;
         pnl.add(new JLabel("NOMBRE: "), gbc);
         gbc.gridx = 1;
-        pnl.add(txtNombre, gbc);
-
+        pnl.add(txt_nombre, gbc);
         gbc.gridy = 4;
         gbc.gridx = 0;
-        pnl.add(btnCancelar, gbc);
+        pnl.add(btn_cancelar, gbc);
         gbc.gridx = 1;
         pnl.add(btn_registrar, gbc);
-
+        
         btn_registrar.addActionListener((ActionEvent e) -> {
-            // lblMessage.setText(CtrHuesped.registrarHuesped(txtNombre.getText(), txtDocumento.getText()));
-            if (lblMessage.getText().equals("")) {
+            lbl_message.setText(ctr.registrarHuesped(txt_nombre.getText(), txt_documento.getText()));
+            if (lbl_message.getText().equals("")) {
+                genery.ajustarNewPanel(pnl_origin, listarHuesped());
                 dg.dispose();
-                genery.ajustarNewPanel(pnl, listarHuesped());
             }
         });
-        btnCancelar.addActionListener((ActionEvent e) -> {
+        btn_cancelar.addActionListener((ActionEvent e) -> {
             dg.dispose();
         });
+        txt_documento.addKeyListener(txtKeyListenerNumber());
+        txt_nombre.addKeyListener(txtKeyListenerChar());
+
+        dg.add(pnl);
         dg.setVisible(true);
     }
 
-    public void actualizarHuesped(String documentoH) {
+    public void actualizarHuesped(JPanel pnl_origin, String document) {
         JFrame frame = Index.jfFrame();
-        CtrHuesped ctr = new CtrHuesped();
-        Huesped hpd = null;
-        // for (Huesped h : inv.getListHPD()) {
-        //     if (h.getNumDocumento().equals(Integer.valueOf(documentoH))) {
-        //         hpd = h;
-        //         break;
-        //     }
-        // }
-        
         JDialog dg = new JDialog(frame, true);
+        JPanel pnl = new JPanel();
+        JTextField txt_nombre = new JTextField();
+        JTextField txt_documento = new JTextField();
+        JButton btn_cancelar = new JButton();
+        JButton btn_actualizar = new JButton();
+        JLabel lbl_title = new JLabel();
+        JLabel lbl_message = new JLabel();
+        CtrHuesped ctr = new CtrHuesped();
+        Huesped hpd = ctr.searhHuespedByDocument(document);
+        GridBagConstraints gbc = new GridBagConstraints();
+
         dg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dg.setSize(450, 600);
-        JPanel pnl = new JPanel(new GridBagLayout());
-        dg.add(pnl);
-        GridBagConstraints gbc = new GridBagConstraints();
+        pnl.setLayout(new GridBagLayout());
+        pnl.setBackground(Color.WHITE);
+        txt_nombre.setColumns(20);
+        txt_documento.setColumns(20);
+        txt_documento.setText(hpd.getNumDocumento() + "");
+        txt_nombre.setText(hpd.getNombre());
+        btn_cancelar.setText("CANCELAR");
+        btn_cancelar.setFocusable(false);
+        btn_actualizar.setText("ACTUALIZAR");
+        btn_actualizar.setFocusable(false);
+        lbl_title.setText("FORMULARIO REGISTRO DE HUESPED ");
+        
         gbc.gridwidth = 2;
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-        pnl.setBackground(Color.WHITE);
-        pnl.add(new JLabel("FORMULARIO DE REGISTRO DE HUESPED "), gbc);
+        pnl.add(lbl_title, gbc);
         gbc.gridy = 3;
         gbc.gridx = 0;
-        JLabel lblMessage = new JLabel();
-        pnl.add(lblMessage, gbc);
-        JTextField txtDocumento = new JTextField(20);
-        txtDocumento.setText(hpd.getNumDocumento()+ "");
-        txtDocumento.addKeyListener(txtKeyListenerNumber());
-        JTextField txtNombre = new JTextField(20);
-        txtNombre.setText(hpd.getNombre() + "");
-        txtNombre.addKeyListener(txtKeyListenerChar());
-        JButton btnCancelar = new JButton("CANCELAR");
-        JButton btnActualizar = new JButton("ACTUALIZAR");
-        btnCancelar.setFocusable(false);
-        btnActualizar.setFocusable(false);
-
+        pnl.add(lbl_message, gbc);
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         pnl.add(new JLabel("# DOCUMENTO: "), gbc);
-
         gbc.gridx = 1;
-        pnl.add(txtDocumento, gbc);
+        pnl.add(txt_documento, gbc);
         gbc.gridy = 2;
         gbc.gridx = 0;
         pnl.add(new JLabel("NOMBRE: "), gbc);
         gbc.gridx = 1;
-        pnl.add(txtNombre, gbc);
-
+        pnl.add(txt_nombre, gbc);
         gbc.gridy = 4;
         gbc.gridx = 0;
-        pnl.add(btnCancelar, gbc);
+        pnl.add(btn_cancelar, gbc);
         gbc.gridx = 1;
-        pnl.add(btnActualizar, gbc);
+        pnl.add(btn_actualizar, gbc);
 
-        btnActualizar.addActionListener((ActionEvent e) -> {
-            Huesped hpd2 = new Huesped();
-            hpd2.setNumDocumento(Integer.valueOf(txtDocumento.getText()));
-            hpd2.setNombre(txtNombre.getText());
-            ctr.actualizarHPD(hpd2);
-            genery.ajustarNewPanel(pnl, listarHuesped());
+        btn_actualizar.addActionListener((ActionEvent e) -> {
+            hpd.setNumDocumento(Integer.valueOf(txt_documento.getText()));
+            hpd.setNombre(txt_nombre.getText());
+            ctr.actualizarHPD(hpd);
+            genery.ajustarNewPanel(pnl_origin, listarHuesped());
             dg.dispose();
         });
-        btnCancelar.addActionListener((ActionEvent e) -> {
+        btn_cancelar.addActionListener((ActionEvent e) -> {
             dg.dispose();
         });
+        txt_documento.addKeyListener(txtKeyListenerNumber());
+        txt_nombre.addKeyListener(txtKeyListenerChar());
+
+        dg.add(pnl);
         dg.setVisible(true);
     }
 
@@ -295,11 +291,5 @@ public class ViewsHuesped {
                 }
             }
         };
-    }
-
-    public void loadPnlIndex(JPanel pnl) {
-        pnl.setVisible(false);
-        pnl.removeAll();
-        pnl.setVisible(true);
     }
 }

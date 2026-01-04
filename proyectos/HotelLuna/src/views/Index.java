@@ -118,7 +118,6 @@ public class Index {
             ViewsHuesped views = new ViewsHuesped();
             JPanel pnl_new = views.listarHuesped();
             genery.ajustarNewPanel(pnl_index, pnl_new);
-            // pnl_index.add(listarHuesped(inventario, frame));
         });
         
         item_estadistica.addActionListener((e) -> {

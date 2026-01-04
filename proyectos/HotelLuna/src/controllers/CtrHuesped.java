@@ -20,7 +20,7 @@ public class CtrHuesped {
     *type: Registrar Huesped
     *return: String
     */
-    public static String registrarHuesped(String nombre, String documento) {
+    public String registrarHuesped(String nombre, String documento) {
         String message = "";
         try {
             if (!nombre.equals("") && !documento.equals("")) {
@@ -149,5 +149,16 @@ public class CtrHuesped {
         String[] atribute = {"DOCUMENTO", "NOMBRE"};
 
         return atribute;
+    }
+
+    public Huesped searhHuespedByDocument(String document){
+        Huesped mdl = new Huesped();
+        for (Huesped h : getListHPD()) {
+            if (h.getNumDocumento().equals(Integer.valueOf(document))) {
+                mdl = h;
+                break;
+            }
+        }
+        return mdl;
     }
 }
