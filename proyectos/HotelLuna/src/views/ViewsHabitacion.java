@@ -2,12 +2,17 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,8 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Models.Habitacion;
+import Models.HabitacionVIP;
 import controllers.CtrHabitacion;
-import controllers.Inventario;
 
 /**
  *
@@ -28,14 +33,14 @@ import controllers.Inventario;
  */
 public class ViewsHabitacion {
     private GeneryViews genery = new GeneryViews();
-    private static DefaultTableModel model = new DefaultTableModel();
+
     public JPanel listarHabitacionesVIP() {
 
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
         JPanel pnl_south = new JPanel();
         JScrollPane scroll = new JScrollPane();
-        JTable table = new JTable();
+        JTable tbl_table = new JTable();
         DefaultTableModel model;
         JTextField txt_buscar = new JTextField();
         JButton btn_buscar = new JButton();
@@ -43,17 +48,17 @@ public class ViewsHabitacion {
         JLabel lbl_cantHbt = new JLabel();
 
         CtrHabitacion ctr = new CtrHabitacion();    
-        model = genery.tableModel(ctr.getDataHBT(), ctr.atributeTable());
+        model = genery.tableModel(ctr.getDataHBTVIP(), ctr.atributeTableTwo());
 
         pnl_south.setLayout(new FlowLayout());
         btn_actualizar.setText("ACTUALIZAR");
         btn_buscar.setText("BUSCAR");
         pnl.setBackground(Color.WHITE);
         pnl.setLayout(new BorderLayout());
-        table.setModel(model);
-        scroll.setViewportView(table);
-        table.setFocusable(false);
-        table.setBackground(Color.WHITE);
+        tbl_table.setModel(model);
+        scroll.setViewportView(tbl_table);
+        tbl_table.setFocusable(false);
+        tbl_table.setBackground(Color.WHITE);
         pnl_buscar.setBackground(Color.WHITE);
         txt_buscar.setColumns(30);
         btn_buscar.setFocusable(false);
@@ -63,19 +68,20 @@ public class ViewsHabitacion {
         
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : CtrHabitacion.buscarHBTVIP("numero", txt_buscar.getText())) {
+            for (String[] obj : ctr.buscarHBTVIP("numero", txt_buscar.getText())) {
                 model.addRow(obj);
             }
             btn_actualizar.setEnabled(false);
         });
-        table.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+        tbl_table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tbl_table.getSelectedRow() != -1) {
                 btn_actualizar.setEnabled(true);
             }
         });
         btn_actualizar.addActionListener(e -> {
-            String data = "";
-            ctr.actualizarHBTVIP(data);
+            int row = tbl_table.getSelectedRow();
+            String numHabitacion = ""+tbl_table.getValueAt(row, 1);
+            actualizarHBTVIP(pnl, numHabitacion);
         });
         
         pnl_south.add(btn_actualizar);
@@ -97,9 +103,9 @@ public class ViewsHabitacion {
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
         JPanel pnl_south = new JPanel();
-        JTable table = new JTable();
+        JTable tbl_table = new JTable();
         JScrollPane scroll = new JScrollPane();
-        
+        DefaultTableModel model;
         JTextField txt_buscar = new JTextField();
         JButton btn_buscar = new JButton();
         JButton btn_actualizar = new JButton();
@@ -108,9 +114,9 @@ public class ViewsHabitacion {
         CtrHabitacion ctr = new CtrHabitacion();
         model = genery.tableModel(ctr.getDataHBT(), ctr.atributeTable());
 
-        table.setModel(model);
-        table.setFocusable(false);
-        scroll.setViewportView(table);
+        tbl_table.setModel(model);
+        tbl_table.setFocusable(false);
+        scroll.setViewportView(tbl_table);
         pnl_south.setLayout(new FlowLayout());
         pnl.setLayout(new BorderLayout());
         pnl.setBackground(Color.WHITE);
@@ -125,8 +131,8 @@ public class ViewsHabitacion {
         btn_actualizar.setFocusable(false);
         cant_habitaciones.setText("CANTIDAD HABITACIONES: N/A");
         
-        table.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+        tbl_table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tbl_table.getSelectedRow() != -1) {
                 btn_actualizar.setEnabled(true);
             }
         });
@@ -138,8 +144,9 @@ public class ViewsHabitacion {
            btn_actualizar.setEnabled(false);
         });
         btn_actualizar.addActionListener(e -> {
-            String[] arrayDataNew = new String[5];
-            CtrHabitacion.actualizarHBT(arrayDataNew);
+            int row = tbl_table.getSelectedRow();
+            String numHabitacion = tbl_table.getValueAt(row, 1)+"";
+            actualizarHBT(pnl, numHabitacion);
         });
         
         pnl_buscar.add(cant_habitaciones);
@@ -150,228 +157,191 @@ public class ViewsHabitacion {
         return pnl;
     }
 
-    private void actualizarHBT(String numHabitacion) {
+    private void actualizarHBT(JPanel pnl_origin, String numHabitacion) {
         try {
-            JFrame frame = Index.jfFrame();
-            Habitacion hbt = null;
-            // for (Habitacion h : inv.getListHBT()) {
-            //     if (h.getNumero().equals(numHabitacion)) {
-            //         hbt = h;
-            //         break;
-            //     }
-            // }
-            JDialog dialog = new JDialog(frame, true);
-            dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            dialog.setSize(550, 700);
-            dialog.setLayout(new BorderLayout());
-            JPanel pnl = new JPanel(new GridBagLayout());
-            dialog.add(pnl);
+            JDialog dg = new JDialog();
+            
+            JPanel pnl = new JPanel();
+            JPanel pnl_cbx = new JPanel();
+            JTextField txt_numHbt = new JTextField();
+            JTextField txt_precio = new JTextField();
+            JButton btn_cancelar = new JButton();
+            JButton btn_actualizar = new JButton();
+            JLabel lbl_message = new JLabel();
+            JLabel lbl_title = new JLabel();
+            JLabel lbl_id = new JLabel();
+            
+            CtrHabitacion ctr = new CtrHabitacion();
+            Habitacion hbt = ctr.searhHabitacionByNumHabitacion(numHabitacion);
+            String charOne = String.valueOf(hbt.getNumero().charAt(0));
+            String stringNumHbt = hbt.getNumero().substring(1, hbt.getNumero().length());
+            JComboBox cbx_char = new JComboBox<>(ctr.charOnes(charOne));
+            JComboBox cbx_tipo = new JComboBox<>(ctr.arrayTipo(hbt.getTipo()));
+            JComboBox cbx_estado = new JComboBox<>(ctr.arrayEstado(hbt.getEstado()));
             GridBagConstraints gbc = new GridBagConstraints();
+            
+            dg.setSize(550, 700);
+            dg.setLayout(new BorderLayout());
+            dg.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            dg.setUndecorated(true);
+            dg.setModal(true);
+            pnl.setBackground(Color.WHITE);
+            pnl.setLayout(new GridBagLayout());
+            pnl_cbx.setBackground(Color.WHITE);
+            cbx_char.setBackground(Color.WHITE);
+            cbx_char.setEnabled(false);
+            cbx_char.setFocusable(false);
+            cbx_tipo.setFocusable(false);
+            cbx_estado.setFocusable(false);
+            cbx_tipo.setBackground(Color.WHITE);
+            cbx_estado.setBackground(Color.WHITE);
+            cbx_tipo.setPreferredSize(new Dimension(225, 20));
+            cbx_estado.setPreferredSize(new Dimension(225, 20));
+            txt_precio.setText(hbt.getPrecio() + "");
+            txt_numHbt.setEnabled(false);
+            txt_numHbt.setText(stringNumHbt);
+            txt_numHbt.setColumns(16);
+            txt_precio.setColumns(16);
+            btn_cancelar.setFocusable(false);
+            btn_cancelar.setText("CANCELAR");
+            btn_actualizar.setText("ACTUALIZAR");
+            btn_actualizar.setFocusable(false);
+            lbl_title.setText("FORMULARIO ACTUALIZACION DE HABITACION ");
+            lbl_id.setText(hbt.getId() + "");
+            lbl_id.setVisible(false);
+
             gbc.gridwidth = 2;
             gbc.gridy = 0;
             gbc.gridx = 0;
             gbc.insets = new Insets(10, 10, 10, 10);
-            
-            pnl.setBackground(Color.WHITE);
-            pnl.add(new JLabel("FORMULARIO ACTUALIZACION DE HABITACION "), gbc);
+            pnl.add(lbl_title, gbc);
             gbc.gridy = 3;
             gbc.gridx = 0;
-            JLabel lblMessage = new JLabel();
-            pnl.add(lblMessage, gbc);
-            String charOne = String.valueOf(hbt.getNumero().charAt(0));
-            String stringNumHbt = hbt.getNumero().substring(1, hbt.getNumero().length());
-            String[] charOnes = {charOne, "A", "B", "C", "D", "E", "F", "K", "M"};
-            JComboBox cbxChar = new JComboBox<>(charOnes);
-            cbxChar.setEnabled(false);
-            cbxChar.setFocusable(false);
-            cbxChar.setBackground(Color.WHITE);
-            JTextField txtNumHbt = new JTextField(16);
-            txtNumHbt.setEnabled(false);
-            txtNumHbt.setText(stringNumHbt);
-            //txtNumHbt.addKeyListener(txtKeyListenerNumber());
-            JPanel pnlCbx = new JPanel();
-            pnlCbx.setBackground(Color.WHITE);
-            pnlCbx.add(cbxChar);
-            pnlCbx.add(txtNumHbt);
-
-            JTextField txtPrecio = new JTextField(20);
-            txtPrecio.setText(hbt.getPrecio() + "");
-            txtPrecio.addKeyListener(txtKeyListenerNumber());
-
-            String[] tipo = {
-                hbt.getTipo(),
-                "INDIVIDUAL",
-                "DOBLE",
-                "SUITE",
-                "FAMILIAR",
-                "PRESIDENCIAL",
-                "ECONOMICA"};
-            JComboBox cbxTipoHbt = new JComboBox<>(tipo);
-            String[] estado = {
-                hbt.getEstado(),
-                "DISPONIBLE",
-                "OCUPADA",
-                "RESERVADA",
-                "MANTENIMIENTO"
-            };
-            JComboBox cbxEstado = new JComboBox<>(estado);
-            cbxTipoHbt.setFocusable(false);
-            cbxEstado.setFocusable(false);
-            cbxTipoHbt.setBackground(Color.WHITE);
-            cbxEstado.setBackground(Color.WHITE);
-            cbxTipoHbt.setPreferredSize(new Dimension(225, 20));
-            cbxEstado.setPreferredSize(new Dimension(225, 20));
-
-            JLabel message = new JLabel();
-
-            JButton btnCancelar = new JButton("CANCELAR");
-            JButton btnActualizar = new JButton("ACTUALIZAR");
-            btnCancelar.setFocusable(false);
-            btnActualizar.setFocusable(false);
-
+            pnl.add(lbl_message, gbc);
             gbc.gridy = 1;
             gbc.gridx = 0;
             gbc.gridwidth = 1;
             pnl.add(new JLabel("# HABITACION: "), gbc);
-
             gbc.gridx = 1;
-            pnl.add(pnlCbx, gbc);
+            pnl.add(pnl_cbx, gbc);
             gbc.gridy = 2;
             gbc.gridx = 0;
             pnl.add(new JLabel("PRECIO: "), gbc);
             gbc.gridx = 1;
-            pnl.add(txtPrecio, gbc);
-
+            pnl.add(txt_precio, gbc);
             gbc.gridy = 3;
             gbc.gridx = 0;
             pnl.add(new JLabel("TIPO HABITACION: "), gbc);
             gbc.gridx = 1;
-            pnl.add(cbxTipoHbt, gbc);
-
+            pnl.add(cbx_tipo, gbc);
             gbc.gridy = 4;
             gbc.gridx = 0;
             pnl.add(new JLabel("ESTADO"), gbc);
             gbc.gridx = 1;
-            pnl.add(cbxEstado, gbc);
-
+            pnl.add(cbx_estado, gbc);
             gbc.gridy = 5;
             gbc.gridx = 0;
             gbc.gridwidth = 2;
-            pnl.add(message, gbc);
-
+            pnl.add(lbl_message, gbc);
             gbc.gridy = 6;
             gbc.gridx = 0;
             gbc.gridwidth = 1;
-            pnl.add(btnCancelar, gbc);
+            pnl.add(btn_cancelar, gbc);
             gbc.gridx = 1;
-            pnl.add(btnActualizar, gbc);
-
-            JLabel lblId = new JLabel(hbt.getId() + "");
-            lblId.setVisible(false);
+            pnl.add(btn_actualizar, gbc);
             gbc.gridy = 7;
             gbc.gridx = 0;
-            pnl.add(lblId, gbc);
+            pnl.add(lbl_id, gbc);
 
-            btnCancelar.addActionListener((ActionEvent e) -> {
-                dialog.dispose();
+            btn_actualizar.addActionListener((ActionEvent e) -> {
+                hbt.setId(Integer.valueOf(lbl_id.getText()));
+                hbt.setNumero("" + cbx_char.getSelectedItem() + txt_numHbt.getText());
+                hbt.setPrecio(Integer.valueOf(txt_precio.getText()));
+                hbt.setTipo("" + cbx_tipo.getSelectedItem());
+                hbt.setEstado("" + cbx_estado.getSelectedItem());
+                ctr.actualizarHBT(hbt);
+                genery.ajustarNewPanel(pnl_origin, listarHabitaciones());
+                dg.dispose();
             });
-            btnActualizar.addActionListener((ActionEvent e) -> {
-                Habitacion hbt1 = new Habitacion();
-                hbt1.setId(Integer.valueOf(lblId.getText()));
-                hbt1.setNumero("" + cbxChar.getSelectedItem() + txtNumHbt.getText());
-                hbt1.setPrecio(Integer.valueOf(txtPrecio.getText()));
-                System.out.println("Precio:: "+txtPrecio.getText());
-                hbt1.setTipo("" + cbxTipoHbt.getSelectedItem());
-                hbt1.setEstado("" + cbxEstado.getSelectedItem());
-                //inv.actualizarHBT(hbt1);
-                loadPnlIndex(pnl2);
-                //pnl2.add(listarHabitaciones());
-                dialog.dispose();
+            btn_cancelar.addActionListener((ActionEvent e) -> {
+                dg.dispose();
             });
+            txt_precio.addKeyListener(genery.txtKeyListenerNumber());
+            txt_numHbt.addKeyListener(genery.txtKeyListenerNumber());
 
-            dialog.setVisible(true);
+            pnl_cbx.add(cbx_char);
+            pnl_cbx.add(txt_numHbt);
+            dg.add(pnl);
+            dg.setVisible(true);
         } catch (Exception e) {
-            System.out.println("Aptualizacion de registro no sera posible, comuniquese con soporte");
+            System.out.println("Aptualizacion de registro no sera posible, comuniquese con soporte ");
         }
 
     }
     
-    private void actualizarHBTVIP(Inventario inv, JFrame frame, String numHabitacion, JPanel pnl2) {
+    private void actualizarHBTVIP(JPanel pnl_origin, String numHabitacion) {
         try {
-            HabitacionVIP hbt = null;
-            // for (HabitacionVIP h : inv.getListHBTVIP()) {
-            //     if (h.getNumero().equals(numHabitacion)) {
-            //         hbt = h;
-            //         break;
-            //     }
-            // }
-            JDialog dialog = new JDialog(frame, true);
-            dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            dialog.setSize(550, 700);
-            dialog.setLayout(new BorderLayout());
-            JPanel pnl = new JPanel(new GridBagLayout());
-            dialog.add(pnl);
+            JDialog dg = new JDialog();
+            JPanel pnl = new JPanel();
+            JPanel pnl_cbx = new JPanel();
+            JPanel pnl_vip = new JPanel();
+            JTextField txt_precio = new JTextField();
+            JTextField txt_numHbt = new JTextField(16);
+            JButton btn_cancelar = new JButton();
+            JButton btn_actualizar = new JButton();
+            JLabel lbl_title = new JLabel();
+            JLabel lbl_id = new JLabel();
+            JLabel lbl_vip = new JLabel();
+            JLabel lbl_message = new JLabel();
+            CtrHabitacion ctr = new CtrHabitacion();
+            HabitacionVIP hbt = ctr.searhHabitacionVIPByNumHabitacion(numHabitacion);
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = 2;
-            gbc.gridy = 0;
-            gbc.gridx = 0;
-            gbc.insets = new Insets(10, 10, 10, 10);
-            pnl.setBackground(Color.WHITE);
-            pnl.add(new JLabel("FORMULARIO ACTUALIZACION DE HABITACION"), gbc);
-            gbc.gridy = 3;
-            gbc.gridx = 0;
-            JLabel lblMessage = new JLabel();
-            pnl.add(lblMessage, gbc);
             String charOne = String.valueOf(hbt.getNumero().charAt(0));
             String stringNumHbt = hbt.getNumero().substring(1, hbt.getNumero().length());
-            String[] charOnes = {charOne, "A", "B", "C", "D", "E", "F", "K", "M"};
-            JComboBox cbxChar = new JComboBox<>(charOnes);
-            cbxChar.setFocusable(false);
-            cbxChar.setBackground(Color.WHITE);
-            JTextField txtNumHbt = new JTextField(16);
-            txtNumHbt.setText(stringNumHbt);
-            txtNumHbt.addKeyListener(txtKeyListenerNumber());
-            JPanel pnlCbx = new JPanel();
-            pnlCbx.setBackground(Color.WHITE);
-            cbxChar.setEnabled(false);
-            txtNumHbt.setEnabled(false);
-            pnlCbx.add(cbxChar);
-            pnlCbx.add(txtNumHbt);
+            txt_numHbt.setText(stringNumHbt);
+            JComboBox cbx_char = new JComboBox<>(ctr.charOnes(charOne));
+            JComboBox cbx_tipo = new JComboBox<>(ctr.arrayTipo(hbt.getTipo()));
+            JComboBox cbx_estado = new JComboBox<>(ctr.arrayEstado(hbt.getEstado()));
+            JCheckBox op1 = new JCheckBox();
+            JCheckBox op2 = new JCheckBox();
+            JCheckBox op3 = new JCheckBox();
+            JCheckBox op4 = new JCheckBox();
 
-            JTextField txtPrecio = new JTextField(20);
-            txtPrecio.setText(hbt.getPrecio() + "");
-            txtPrecio.addKeyListener(txtKeyListenerNumber());
-
-            String[] tipo = {
-                hbt.getTipo(),
-                "INDIVIDUAL",
-                "DOBLE",
-                "SUITE",
-                "FAMILIAR",
-                "PRESENCIAL",
-                "ECONOMICA"};
-            JComboBox cbxTipoHbt = new JComboBox<>(tipo);
-            String[] estado = {
-                hbt.getEstado(),
-                "DISPONIBLE",
-                "OCUPADA",
-                "RESERVADA",
-                "MANTENIMIENTO"
-            };
-            JComboBox cbxEstado = new JComboBox<>(estado);
-            cbxTipoHbt.setBackground(Color.WHITE);
-            cbxEstado.setBackground(Color.WHITE);
-            cbxTipoHbt.setFocusable(false);
-            cbxEstado.setFocusable(false);
-            cbxTipoHbt.setPreferredSize(new Dimension(225, 20));
-            cbxEstado.setPreferredSize(new Dimension(225, 20));
-
-            JPanel pnlVip = new JPanel(new GridLayout(2, 2));
-            pnlVip.setBackground(Color.WHITE);
-            JCheckBox op1 = new JCheckBox("TELEVISIÓN TÁCTIL");
-            JCheckBox op2 = new JCheckBox("JACUZZI");
-            JCheckBox op3 = new JCheckBox("VISTA AL MAR");
-            JCheckBox op4 = new JCheckBox("SALA DE SPA");
+            dg.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            dg.setSize(550, 700);
+            dg.setLayout(new BorderLayout());
+            dg.setUndecorated(true);
+            dg.setModal(true);
+            pnl.setLayout(new GridBagLayout());
+            pnl.setBackground(Color.WHITE);
+            pnl_vip.setLayout(new GridLayout(2, 2));
+            pnl_cbx.setBackground(Color.WHITE);
+            cbx_char.setFocusable(false);
+            cbx_char.setBackground(Color.WHITE);
+            cbx_char.setEnabled(false);
+            txt_numHbt.setEnabled(false);
+            cbx_tipo.setBackground(Color.WHITE);
+            cbx_estado.setBackground(Color.WHITE);
+            cbx_tipo.setFocusable(false);
+            cbx_estado.setFocusable(false);
+            cbx_tipo.setPreferredSize(new Dimension(225, 20));
+            cbx_estado.setPreferredSize(new Dimension(225, 20));
+            txt_numHbt.setColumns(16);
+            txt_numHbt.setText(stringNumHbt);
+            txt_precio.setColumns(20);
+            btn_cancelar.setText("CANCELAR");
+            btn_cancelar.setFocusable(false);
+            btn_actualizar.setText("ACTUALIZAR");
+            btn_actualizar.setFocusable(false);
+            lbl_title.setText("FORMULARIO ACTUALIZACION DE HABITACION");
+            lbl_id.setText(hbt.getId() + "");
+            lbl_id.setVisible(false);
+            pnl_vip.setBackground(Color.WHITE);
+            lbl_vip.setVisible(false);
+            op1.setText("TELEVISIÓN TÁCTIL");
+            op2.setText("JACUZZI");
+            op3.setText("VISTA AL MAR");
+            op4.setText("SALA DE SPA");
             op1.setBackground(Color.WHITE);
             op2.setBackground(Color.WHITE);
             op3.setBackground(Color.WHITE);
@@ -380,122 +350,115 @@ public class ViewsHabitacion {
             op2.setFocusable(false);
             op3.setFocusable(false);
             op4.setFocusable(false);
-            JLabel lblVip = new JLabel();
+
+            gbc.gridwidth = 2;
+            gbc.gridy = 0;
+            gbc.gridx = 0;
+            gbc.insets = new Insets(10, 10, 10, 10);
+            pnl.add(lbl_title, gbc);
+            gbc.gridy = 3;
+            gbc.gridx = 0;
+            pnl.add(lbl_message, gbc);
+            gbc.gridy = 1;
+            gbc.gridx = 0;
+            gbc.gridwidth = 1;
+            pnl.add(new JLabel("# HABITACION: "), gbc);
+            gbc.gridx = 1;
+            pnl.add(pnl_cbx, gbc);
+            gbc.gridy = 2;
+            gbc.gridx = 0;
+            pnl.add(new JLabel("PRECIO: "), gbc);
+            gbc.gridx = 1;
+            pnl.add(txt_precio, gbc);
+            gbc.gridy = 3;
+            gbc.gridx = 0;
+            pnl.add(new JLabel("TIPO HABITACION: "), gbc);
+            gbc.gridx = 1;
+            pnl.add(cbx_tipo, gbc);
+            gbc.gridy = 4;
+            gbc.gridx = 0;
+            pnl.add(new JLabel("ESTADO"), gbc);
+            gbc.gridx = 1;
+            pnl.add(cbx_estado, gbc);
+            gbc.gridy = 5;
+            gbc.gridx = 0;
+            pnl.add(new JLabel("SERVICIOS EXTRA: "), gbc);
+            gbc.gridx = 1;
+            pnl.add(pnl_vip, gbc);
+            gbc.gridx = 2;
+            pnl.add(lbl_vip, gbc);
+            gbc.gridy = 6;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            pnl.add(lbl_message, gbc);
+            gbc.gridy = 7;
+            gbc.gridx = 0;
+            gbc.gridwidth = 1;
+            pnl.add(btn_cancelar, gbc);
+            gbc.gridx = 1;
+            pnl.add(btn_actualizar, gbc);
+            gbc.gridy = 8;
+            gbc.gridx = 0;
+            pnl.add(lbl_id, gbc);
+
             if (hbt.getServiciosExtras().contains("TELEVISIÓN TÁCTIL")) {
                 op1.setSelected(true);
-                lblVip.setText(op1.getText()+"-");
+                lbl_vip.setText(op1.getText()+"-");
             }
             if (hbt.getServiciosExtras().contains("JACUZZI")) {
                 op2.setSelected(true);
-                lblVip.setText(op2.getText()+"-");
+                lbl_vip.setText(op2.getText()+"-");
             }
             if (hbt.getServiciosExtras().contains("VISTA AL MAR")) {
                 op3.setSelected(true);
-                lblVip.setText(op3.getText()+"-");
+                lbl_vip.setText(op3.getText()+"-");
             }
             if (hbt.getServiciosExtras().contains("SALA DE SPA")) {
                 op4.setSelected(true);
-                lblVip.setText(op4.getText()+"-");
+                lbl_vip.setText(op4.getText()+"-");
             }
 
-            
-            lblVip.setVisible(false);
             ActionListener listener = (var e1) -> {
-                lblVip.setText(
+                lbl_vip.setText(
                         (op1.isSelected() ? op1.getText() + "-" : "")
                         + (op2.isSelected() ? op2.getText() + "-" : "")
                         + (op3.isSelected() ? op3.getText() + "-" : "")
                         + (op4.isSelected() ? op4.getText() + "-" : "")
                 );
             };
+            btn_actualizar.addActionListener((ActionEvent e) -> {
+                hbt.setId(Integer.valueOf(lbl_id.getText()));
+                hbt.setNumero("" + cbx_char.getSelectedItem() + txt_numHbt.getText());
+                hbt.setPrecio(Integer.valueOf(txt_precio.getText()));
+                hbt.setTipo("" + cbx_tipo.getSelectedItem());
+                hbt.setEstado("" + cbx_estado.getSelectedItem());
+                String servicios = lbl_vip.getText();
+                hbt.setServiciosExtras(servicios.substring(0, servicios.length() - 1));
+                ctr.actualizarHBTVIP(hbt);
+                genery.ajustarNewPanel(pnl_origin, listarHabitacionesVIP());
+                dg.dispose();
+            });
+            btn_cancelar.addActionListener((ActionEvent e) -> {
+                dg.dispose();
+            });
+            txt_numHbt.addKeyListener(genery.txtKeyListenerNumber());
+            txt_precio.addKeyListener(genery.txtKeyListenerNumber());
+
             op1.addActionListener(listener);
             op2.addActionListener(listener);
             op3.addActionListener(listener);
             op4.addActionListener(listener);
-            pnlVip.add(op1);
-            pnlVip.add(op2);
-            pnlVip.add(op3);
-            pnlVip.add(op4);
-            JLabel message = new JLabel();
+            pnl_cbx.add(cbx_char);
+            pnl_cbx.add(txt_numHbt);
+            pnl_vip.add(op1);
+            pnl_vip.add(op2);
+            pnl_vip.add(op3);
+            pnl_vip.add(op4);
+            dg.add(pnl);
 
-            JButton btnCancelar = new JButton("CANCELAR");
-            JButton btnActualizar = new JButton("ACTUALIZAR");
-            btnCancelar.setFocusable(false);
-            btnActualizar.setFocusable(false);
-
-            gbc.gridy = 1;
-            gbc.gridx = 0;
-            gbc.gridwidth = 1;
-            pnl.add(new JLabel("# HABITACION: "), gbc);
-
-            gbc.gridx = 1;
-            pnl.add(pnlCbx, gbc);
-            gbc.gridy = 2;
-            gbc.gridx = 0;
-            pnl.add(new JLabel("PRECIO: "), gbc);
-            gbc.gridx = 1;
-            pnl.add(txtPrecio, gbc);
-
-            gbc.gridy = 3;
-            gbc.gridx = 0;
-            pnl.add(new JLabel("TIPO HABITACION: "), gbc);
-            gbc.gridx = 1;
-            pnl.add(cbxTipoHbt, gbc);
-
-            gbc.gridy = 4;
-            gbc.gridx = 0;
-            pnl.add(new JLabel("ESTADO"), gbc);
-            gbc.gridx = 1;
-            pnl.add(cbxEstado, gbc);
-
-            gbc.gridy = 5;
-            gbc.gridx = 0;
-            pnl.add(new JLabel("SERVICIOS EXTRA: "), gbc);
-            gbc.gridx = 1;
-            pnl.add(pnlVip, gbc);
-            gbc.gridx = 2;
-            pnl.add(lblVip, gbc);
-
-            gbc.gridy = 6;
-            gbc.gridx = 0;
-            gbc.gridwidth = 2;
-            pnl.add(message, gbc);
-
-            gbc.gridy = 7;
-            gbc.gridx = 0;
-            gbc.gridwidth = 1;
-            pnl.add(btnCancelar, gbc);
-            gbc.gridx = 1;
-            pnl.add(btnActualizar, gbc);
-
-            JLabel lblId = new JLabel(hbt.getId() + "");
-            lblId.setVisible(false);
-
-            gbc.gridy = 8;
-            gbc.gridx = 0;
-            pnl.add(lblId, gbc);
-
-            btnCancelar.addActionListener((ActionEvent e) -> {
-                dialog.dispose();
-            });
-            btnActualizar.addActionListener((ActionEvent e) -> {
-                HabitacionVIP hbt1 = new HabitacionVIP();
-                hbt1.setId(Integer.valueOf(lblId.getText()));
-                hbt1.setNumero("" + cbxChar.getSelectedItem() + txtNumHbt.getText());
-                hbt1.setPrecio(Integer.valueOf(txtPrecio.getText()));
-                hbt1.setTipo("" + cbxTipoHbt.getSelectedItem());
-                hbt1.setEstado("" + cbxEstado.getSelectedItem());
-                String servicios = lblVip.getText();
-                hbt1.setServiciosExtras(servicios.substring(0, servicios.length() - 1));
-                // inv.actualizarHBTVIP(hbt1);
-                loadPnlIndex(pnl2);
-                // pnl2.add(listarHabitacionesVIP(inv, frame));
-                dialog.dispose();
-            });
-
-            dialog.setVisible(true);
+            dg.setVisible(true);
         } catch (Exception e) {
-            System.out.println("Aptualizacion de registro no sera posible, comuniquese con soporte");
+            System.out.println("Aptualizacion de registro no sera posible, comuniquese con soporte "+e);
         }
 
     }

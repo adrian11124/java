@@ -1,6 +1,9 @@
 package views;
 
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -33,6 +36,37 @@ public class GeneryViews {
         }
   
         return model;
+    }
+
+    /**
+     * status: active
+     *solo permite numeros
+     */
+    public KeyListener txtKeyListenerNumber() {
+        return new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume();
+                }
+            }
+        };
+    }
+    /**
+     * status: active
+     *solo permite numeros
+     */
+    public KeyListener txtKeyListenerChar() {
+        return new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (Character.isDigit(c)) {
+                    e.consume();
+                }
+            }
+        };
     }
 
     /**

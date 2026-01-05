@@ -9,38 +9,14 @@ import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
 import Models.Huesped;
@@ -133,8 +109,7 @@ public class ViewsHuesped {
     }
 
     public void registrarHuesped(JPanel pnl_origin) {
-        JFrame frame = Index.jfFrame();
-        JDialog dg = new JDialog(frame, true);
+        JDialog dg = new JDialog();
         JPanel pnl = new JPanel();
         JLabel lbl_message = new JLabel();
         JLabel lbl_title = new JLabel();
@@ -147,6 +122,8 @@ public class ViewsHuesped {
         
         dg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dg.setSize(450, 600);
+        dg.setModal(true);
+        dg.setUndecorated(true);
         pnl.setLayout(new GridBagLayout());
         pnl.setBackground(Color.WHITE);
         txt_documento.setColumns(20);
@@ -192,16 +169,15 @@ public class ViewsHuesped {
         btn_cancelar.addActionListener((ActionEvent e) -> {
             dg.dispose();
         });
-        txt_documento.addKeyListener(txtKeyListenerNumber());
-        txt_nombre.addKeyListener(txtKeyListenerChar());
+        txt_documento.addKeyListener(genery.txtKeyListenerNumber());
+        txt_nombre.addKeyListener(genery.txtKeyListenerChar());
 
         dg.add(pnl);
         dg.setVisible(true);
     }
 
     public void actualizarHuesped(JPanel pnl_origin, String document) {
-        JFrame frame = Index.jfFrame();
-        JDialog dg = new JDialog(frame, true);
+        JDialog dg = new JDialog();
         JPanel pnl = new JPanel();
         JTextField txt_nombre = new JTextField();
         JTextField txt_documento = new JTextField();
@@ -215,6 +191,8 @@ public class ViewsHuesped {
 
         dg.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dg.setSize(450, 600);
+        dg.setUndecorated(true);
+        dg.setModal(true);
         pnl.setLayout(new GridBagLayout());
         pnl.setBackground(Color.WHITE);
         txt_nombre.setColumns(20);
@@ -262,34 +240,12 @@ public class ViewsHuesped {
         btn_cancelar.addActionListener((ActionEvent e) -> {
             dg.dispose();
         });
-        txt_documento.addKeyListener(txtKeyListenerNumber());
-        txt_nombre.addKeyListener(txtKeyListenerChar());
+        txt_documento.addKeyListener(genery.txtKeyListenerNumber());
+        txt_nombre.addKeyListener(genery.txtKeyListenerChar());
 
         dg.add(pnl);
         dg.setVisible(true);
     }
 
-    static KeyListener txtKeyListenerNumber() {
-        return new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c)) {
-                    e.consume();
-                }
-            }
-        };
-    }
-
-     static KeyListener txtKeyListenerChar() {
-        return new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (Character.isDigit(c)) {
-                    e.consume();
-                }
-            }
-        };
-    }
+    
 }

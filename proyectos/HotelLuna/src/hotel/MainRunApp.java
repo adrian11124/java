@@ -16,12 +16,15 @@ import views.Index;
  */
 public class MainRunApp {
     
+    public static conexion cn = new conexion();
     public static List<Habitacion> listHBT = new ArrayList<>();
     public static List<HabitacionVIP> listHBTVIP = new ArrayList<>();
     public static List<Huesped> listHuespeds = new ArrayList<>();
     public static List<Reserva> listReserva = new ArrayList<>();
+
     public static void main(String[] args) {
-        conexion.ArrayToLists();
+        cn.ArrayToLists();
         Index index = new Index();
+        cn.guardarProceso();
     }
 }

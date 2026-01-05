@@ -5,8 +5,6 @@ import java.util.List;
 
 import Models.Habitacion;
 import Models.HabitacionVIP;
-import bd.conexion;
-import bd.cn_habitacion;
 import hotel.MainRunApp;
 
 /**
@@ -14,8 +12,6 @@ import hotel.MainRunApp;
  * @author adrian11124
  */
 public class CtrHabitacion {
-
-    private static cn_habitacion cn = new cn_habitacion();
 
     /**
      *Genera un array de habitaciones disponibles
@@ -86,36 +82,7 @@ public class CtrHabitacion {
         }
         return listArray;
     }
-
-    /**
-    *------------------------------------------------------------
-    *return: arreglo
-    */
-    public static List<Object> ArrayToObject(int id_table) {
-        try {
-            List<Object>  listHabitacion = new ArrayList<>();
-            String[] arrHBT = conexion.fileReadObject("archivo.txt", id_table).split("_");
-            for (String registro : arrHBT) {
-                String[] atrs = registro.split(",");
-                Habitacion hbt = new Habitacion();
-                hbt.setId(Integer.valueOf(atrs[0]));
-                hbt.setNumero(atrs[1]);
-                hbt.setPrecio(Integer.valueOf(atrs[2]));
-                hbt.setTipo(atrs[3]);
-                hbt.setEstado(atrs[4]);
-                listHabitacion.add(hbt);
-            }
-            return listHabitacion;
-
-        } catch (NumberFormatException e) {
-            System.out.println("No se pudo leer el archivo :: " + e);
-            return null;
-            
-        }
-    }
-
     
-
     /**
      *genera una lista de arrays(habitaciones) disponibles
      *return: List<String[]>
@@ -135,7 +102,7 @@ public class CtrHabitacion {
      *genera una lista de arrays(Habitaciones) disponibles
      *return: List<String[]>
      */
-    public static List<String[]> getDataHBTVIP() {
+    public List<String[]> getDataHBTVIP() {
         List<String[]> listArray = new ArrayList<>();
         for (HabitacionVIP vip : MainRunApp.listHBTVIP) {
             listArray.add(getValues(vip));
@@ -179,7 +146,7 @@ public class CtrHabitacion {
      */
     public List<String[]> buscarHBT(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
-        for (Habitacion h : cn.listHabitacion()) {
+        for (Habitacion h : listHabitacion()) {
             String cl = h.toString();
             if (cl.contains(nameColumn + "=" + value)) {
                 listBusqueda.add(getValues(h));
@@ -192,7 +159,7 @@ public class CtrHabitacion {
      *genera lista de arrays(habitaciones VIP) que coinciden con el formato a buscar
      *return: List<String[]>
      */
-    public static List<String[]> buscarHBTVIP(String nameColumn, Object value) {
+    public List<String[]> buscarHBTVIP(String nameColumn, Object value) {
         List<String[]> listBusqueda = new ArrayList<>();
         for (HabitacionVIP h : MainRunApp.listHBTVIP) {
             String cl = h.toString();
@@ -207,16 +174,33 @@ public class CtrHabitacion {
      *actualiza una habitacion
      *return: n/a
      */
-    public static void actualizarHBT(String[] arrayHbt) {
-        
+    public void actualizarHBT(Habitacion hbt) {
+        for (Habitacion h : MainRunApp.listHBT) {
+            if (h.getNumero().equals(hbt.getNumero())) {
+                h.setNumero(hbt.getNumero());
+                h.setPrecio(hbt.getPrecio());
+                h.setEstado(hbt.getEstado());
+                h.setTipo(hbt.getTipo());
+                break;
+            }
+        }
     }
 
     /**
      *actualiza una habitacion VIP
      *return: n/a
      */
-    public void actualizarHBTVIP(String data) {
-         
+    public void actualizarHBTVIP(HabitacionVIP hbt) {
+         for (HabitacionVIP h : MainRunApp.listHBTVIP) {
+            if (h.getNumero().equals(hbt.getNumero())) {
+                h.setNumero(hbt.getNumero());
+                h.setPrecio(hbt.getPrecio());
+                h.setEstado(hbt.getEstado());
+                h.setTipo(hbt.getTipo());
+                h.setTipo(hbt.getServiciosExtras());
+                break;
+            }
+        }
     }
 
     /**
@@ -239,5 +223,73 @@ public class CtrHabitacion {
         };
 
         return atribute;
+    }
+    /**
+     *genera un array con los atributos del modelo
+     *return: String[]
+     */
+    public String[] atributeTableTwo(){
+        String[] atribute = {"# HABITACION",
+            "PRECIO",
+            "TIPO",
+            "ESTADO",
+            "SERVICIO EXTRA"
+        };
+
+        return atribute;
+    }
+
+    public Habitacion searhHabitacionByNumHabitacion(String numHabitacion){
+        Habitacion mdl = new Habitacion();
+        for (Habitacion h : getListHBT()) {
+                if (h.getNumero().equals(numHabitacion)) {
+                    mdl = h;
+                    break;
+                }
+        }
+        return mdl;
+    }
+
+    public HabitacionVIP searhHabitacionVIPByNumHabitacion(String numHabitacion){
+        HabitacionVIP mdl = new HabitacionVIP();
+        System.out.println("numero habitacion String :: "+numHabitacion+"\n\n");
+        for (HabitacionVIP h : getListHBTVIP()) {
+            System.out.println("\nRecorriendo Habitacion:: "+h.getNumero()+"\n\n");
+                if (h.getNumero().equals(numHabitacion)) {
+                    mdl = h;
+                     
+                    break;
+                }
+        }
+        System.out.println("numero habitacion "+mdl.getNumero()+"\n\n");
+        return mdl;
+    }
+
+    public String[] charOnes(String one){
+        String[] charOnes = {one, "A", "B", "C", "D", "E", "F", "K", "M"};
+        return charOnes;
+    }
+
+    public String[] arrayTipo(String tipoSelected){
+        String[] tipo = {
+                tipoSelected,
+                "INDIVIDUAL",
+                "DOBLE",
+                "SUITE",
+                "FAMILIAR",
+                "PRESIDENCIAL",
+                "ECONOMICA"};
+        return tipo;
+    }
+
+    public String[] arrayEstado(String estadoSeleted){
+        String[] estado = {
+                estadoSeleted,
+                "DISPONIBLE",
+                "OCUPADA",
+                "RESERVADA",
+                "MANTENIMIENTO"
+            };
+        return estado;
     }
 }

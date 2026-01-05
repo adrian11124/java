@@ -1,6 +1,5 @@
 package views;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,9 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.FontUIResource;
 
-import controllers.CtrHabitacion;
-import controllers.CtrHuesped;
-import bd.conexion;
 
 /**
  *
@@ -34,7 +30,7 @@ public class Index {
      */
     public Index() {
 
-        JFrame frame = jfFrame();
+        JFrame frame = new JFrame();
         JPanel pnl_index = new JPanel();
         JPanel pnl_indexLogo = new JPanel();
         JPanel pnl_indexImg = new JPanel();
@@ -107,7 +103,7 @@ public class Index {
         });
         item_reservarHabitacion.addActionListener((ActionEvent e) -> {
             ViewsReserva views = new ViewsReserva();
-            views.reservarHabitacion(frame);
+            views.reservarHabitacion();
         });
         item_listarReserva.addActionListener((e) -> {
             ViewsReserva views = new ViewsReserva();
@@ -121,10 +117,11 @@ public class Index {
         });
         
         item_estadistica.addActionListener((e) -> {
-            // pnl_index.add(estadistica(inventario));
+            ViewsEstadistica views = new ViewsEstadistica();
+            JPanel pnl_new = views.estadistica();
+            genery.ajustarNewPanel(pnl_index, pnl_new);
         });
         item_salir.addActionListener((e) -> {
-            //conexion.guardarProceso();
             frame.dispose();
         });
         
@@ -156,11 +153,5 @@ public class Index {
         
         frame.setVisible(true);
     }
-
-    public static JFrame jfFrame() {
-        JFrame frame = new JFrame();
-        return frame;
-    }
-
     
 }

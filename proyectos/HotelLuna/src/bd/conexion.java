@@ -5,14 +5,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import Models.Habitacion;
 import Models.HabitacionVIP;
 import Models.Huesped;
 import Models.Reserva;
-import controllers.CtrHabitacion;
 import hotel.MainRunApp;
 
 /**
@@ -44,7 +41,7 @@ public class conexion {
     *Actualiza en archivo
     *return: boolean
     */
-    public boolean fileUpdate(String url, String data) {
+    public static boolean fileUpdate(String url, String data) {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(url))) {
             bw.write(data);
@@ -57,10 +54,10 @@ public class conexion {
     *Convierte un array a listas(modelo)
     *return: boolean
     */
-    public static void ArrayToLists() {
+    public void ArrayToLists() {
         try {
 
-            String[] allData = conexion.fileRead("archivo.txt");
+            String[] allData = fileRead("archivo.txt");
             for (int i = 0; i < allData.length; i++) {
                 if (i == 0) {
                     String[] arrHuesped = allData[i].split("_");
@@ -119,53 +116,6 @@ public class conexion {
             }
         } catch (NumberFormatException e) {
             System.out.println("No se pudo leer el archivo :: " + e);
-        }
-    }
-
-    /**
-    *------------------------------------------------------------
-    *return: arreglo
-    */
-    public static String fileReadObject(String url, int id_table) {
-        String lineaTotal = "";
-        InputStream fileName = conexion.class.getResourceAsStream(url);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(fileName))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                lineaTotal += linea;
-            }
-
-        } catch (Exception e) {
-            lineaTotal = " FAILED:: " + e;
-        }
-        String[] arrayObject = lineaTotal.substring(0, lineaTotal.length() - 1).split(";");
-        return arrayObject[id_table];
-    }
-
-    /**
-    *------------------------------------------------------------
-    *return: arreglo
-    */
-    public static List<Object> ArrayToObject(int id_table) {
-        try {
-            List<Object>  listHabitacion = new ArrayList<>();
-            String[] arrHBT = fileReadObject("archivo.txt", id_table).split("_");
-            for (String registro : arrHBT) {
-                String[] atrs = registro.split(",");
-                Habitacion hbt = new Habitacion();
-                hbt.setId(Integer.valueOf(atrs[0]));
-                hbt.setNumero(atrs[1]);
-                hbt.setPrecio(Integer.valueOf(atrs[2]));
-                hbt.setTipo(atrs[3]);
-                hbt.setEstado(atrs[4]);
-                listHabitacion.add(hbt);
-            }
-            return listHabitacion;
-
-        } catch (NumberFormatException e) {
-            System.out.println("No se pudo leer el archivo :: " + e);
-            return null;
-            
         }
     }
 

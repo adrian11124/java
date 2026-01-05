@@ -43,7 +43,7 @@ public class CtrReserva {
      *genera reserva de 
      *return: n/a
      */
-    public void generarReserva(String data) {
+    public void createReserva(String data) {
         Reserva r = new Reserva();
         String[] array_data = data.split(",");
 
@@ -86,7 +86,7 @@ public class CtrReserva {
         return listArray;
     }   
 
-    public void removeRSV(String id) {
+    public void removeRerservaById(String id) {
         try {
             int i = 0;
             Integer parseId = Integer.valueOf(id);

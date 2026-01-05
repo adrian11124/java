@@ -151,6 +151,10 @@ public class CtrHuesped {
         return atribute;
     }
 
+    /**
+     *genera busqueda por documento
+     *return: Huesped
+     */
     public Huesped searhHuespedByDocument(String document){
         Huesped mdl = new Huesped();
         for (Huesped h : getListHPD()) {
