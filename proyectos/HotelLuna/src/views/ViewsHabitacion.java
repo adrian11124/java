@@ -35,7 +35,7 @@ public class ViewsHabitacion {
     private GeneryViews genery = new GeneryViews();
 
     public JPanel listarHabitacionesVIP() {
-
+        CtrHabitacion ctr = new CtrHabitacion();
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
         JPanel pnl_south = new JPanel();
@@ -46,9 +46,8 @@ public class ViewsHabitacion {
         JButton btn_buscar = new JButton();
         JButton btn_actualizar = new JButton();
         JLabel lbl_cantHbt = new JLabel();
-
-        CtrHabitacion ctr = new CtrHabitacion();    
-        model = genery.tableModel(ctr.getDataHBTVIP(), ctr.atributeTableTwo());
+  
+        model = genery.tableModel(ctr.arrayDataHabitacionVip(), ctr.atributeTableTwo());
 
         pnl_south.setLayout(new FlowLayout());
         btn_actualizar.setText("ACTUALIZAR");
@@ -68,7 +67,7 @@ public class ViewsHabitacion {
         
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : ctr.buscarHBTVIP("numero", txt_buscar.getText())) {
+            for (String[] obj : ctr.searchHabitacionVIP("numero", txt_buscar.getText())) {
                 model.addRow(obj);
             }
             btn_actualizar.setEnabled(false);
@@ -81,7 +80,7 @@ public class ViewsHabitacion {
         btn_actualizar.addActionListener(e -> {
             int row = tbl_table.getSelectedRow();
             String numHabitacion = ""+tbl_table.getValueAt(row, 1);
-            actualizarHBTVIP(pnl, numHabitacion);
+            updateHabitacionVIP(pnl, numHabitacion);
         });
         
         pnl_south.add(btn_actualizar);
@@ -100,6 +99,7 @@ public class ViewsHabitacion {
      *Genera un vista que enlista todas las habitaciones(normal, vip)
      */
     public JPanel listarHabitaciones() {
+        CtrHabitacion ctr = new CtrHabitacion();
         JPanel pnl = new JPanel();
         JPanel pnl_buscar = new JPanel();
         JPanel pnl_south = new JPanel();
@@ -111,8 +111,7 @@ public class ViewsHabitacion {
         JButton btn_actualizar = new JButton();
         JLabel cant_habitaciones = new JLabel();
         
-        CtrHabitacion ctr = new CtrHabitacion();
-        model = genery.tableModel(ctr.getDataHBT(), ctr.atributeTable());
+        model = genery.tableModel(ctr.arrayDataHabitacion(), ctr.atributeTable());
 
         tbl_table.setModel(model);
         tbl_table.setFocusable(false);
@@ -138,7 +137,7 @@ public class ViewsHabitacion {
         });
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : ctr.buscarHBT("numero", txt_buscar.getText())) {
+            for (String[] obj : ctr.searchHabitacion("numero", txt_buscar.getText())) {
                 model.addRow(obj);
             }
            btn_actualizar.setEnabled(false);
@@ -146,7 +145,7 @@ public class ViewsHabitacion {
         btn_actualizar.addActionListener(e -> {
             int row = tbl_table.getSelectedRow();
             String numHabitacion = tbl_table.getValueAt(row, 1)+"";
-            actualizarHBT(pnl, numHabitacion);
+            updateHabitacion(pnl, numHabitacion);
         });
         
         pnl_buscar.add(cant_habitaciones);
@@ -157,10 +156,10 @@ public class ViewsHabitacion {
         return pnl;
     }
 
-    private void actualizarHBT(JPanel pnl_origin, String numHabitacion) {
+    private void updateHabitacion(JPanel pnl_origin, String numHabitacion) {
         try {
+            CtrHabitacion ctr = new CtrHabitacion();
             JDialog dg = new JDialog();
-            
             JPanel pnl = new JPanel();
             JPanel pnl_cbx = new JPanel();
             JTextField txt_numHbt = new JTextField();
@@ -171,7 +170,6 @@ public class ViewsHabitacion {
             JLabel lbl_title = new JLabel();
             JLabel lbl_id = new JLabel();
             
-            CtrHabitacion ctr = new CtrHabitacion();
             Habitacion hbt = ctr.searhHabitacionByNumHabitacion(numHabitacion);
             String charOne = String.valueOf(hbt.getNumero().charAt(0));
             String stringNumHbt = hbt.getNumero().substring(1, hbt.getNumero().length());
@@ -198,6 +196,9 @@ public class ViewsHabitacion {
             cbx_tipo.setPreferredSize(new Dimension(225, 20));
             cbx_estado.setPreferredSize(new Dimension(225, 20));
             txt_precio.setText(hbt.getPrecio() + "");
+            txt_precio.setPreferredSize(new Dimension(225, 20));
+            cbx_char.setEnabled(false);
+            cbx_char.setFocusable(false);
             txt_numHbt.setEnabled(false);
             txt_numHbt.setText(stringNumHbt);
             txt_numHbt.setColumns(16);
@@ -259,7 +260,7 @@ public class ViewsHabitacion {
                 hbt.setPrecio(Integer.valueOf(txt_precio.getText()));
                 hbt.setTipo("" + cbx_tipo.getSelectedItem());
                 hbt.setEstado("" + cbx_estado.getSelectedItem());
-                ctr.actualizarHBT(hbt);
+                ctr.updateHabitacion(hbt);
                 genery.ajustarNewPanel(pnl_origin, listarHabitaciones());
                 dg.dispose();
             });
@@ -279,8 +280,9 @@ public class ViewsHabitacion {
 
     }
     
-    private void actualizarHBTVIP(JPanel pnl_origin, String numHabitacion) {
+    private void updateHabitacionVIP(JPanel pnl_origin, String numHabitacion) {
         try {
+            CtrHabitacion ctr = new CtrHabitacion();
             JDialog dg = new JDialog();
             JPanel pnl = new JPanel();
             JPanel pnl_cbx = new JPanel();
@@ -293,7 +295,6 @@ public class ViewsHabitacion {
             JLabel lbl_id = new JLabel();
             JLabel lbl_vip = new JLabel();
             JLabel lbl_message = new JLabel();
-            CtrHabitacion ctr = new CtrHabitacion();
             HabitacionVIP hbt = ctr.searhHabitacionVIPByNumHabitacion(numHabitacion);
             GridBagConstraints gbc = new GridBagConstraints();
             String charOne = String.valueOf(hbt.getNumero().charAt(0));
@@ -329,6 +330,7 @@ public class ViewsHabitacion {
             txt_numHbt.setColumns(16);
             txt_numHbt.setText(stringNumHbt);
             txt_precio.setColumns(20);
+            txt_precio.setText(hbt.getPrecio()+"");
             btn_cancelar.setText("CANCELAR");
             btn_cancelar.setFocusable(false);
             btn_actualizar.setText("ACTUALIZAR");
@@ -434,7 +436,7 @@ public class ViewsHabitacion {
                 hbt.setEstado("" + cbx_estado.getSelectedItem());
                 String servicios = lbl_vip.getText();
                 hbt.setServiciosExtras(servicios.substring(0, servicios.length() - 1));
-                ctr.actualizarHBTVIP(hbt);
+                ctr.updateHabitacionVIP(hbt);
                 genery.ajustarNewPanel(pnl_origin, listarHabitacionesVIP());
                 dg.dispose();
             });

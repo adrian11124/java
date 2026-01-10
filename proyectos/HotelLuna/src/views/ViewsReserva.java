@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -22,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import controllers.CtrHabitacion;
+import bd.conexion;
 import controllers.CtrHuesped;
 import controllers.CtrReserva;
 
@@ -33,18 +31,17 @@ import controllers.CtrReserva;
 public class ViewsReserva {
 
     private GeneryViews genery = new GeneryViews();
-
     /**
      *Vista de todas las reservas generadas
      */
     public JPanel listarReserva() {
+        CtrReserva ctr = new CtrReserva();
         JPanel pnl = new JPanel();
         JTable table = new JTable();
         JPanel pnl_south = new JPanel();
         JButton btn_remove = new JButton("ELIMINAR");
         JScrollPane scroll = new JScrollPane();
-        CtrReserva ctr = new CtrReserva();
-        DefaultTableModel model = genery.tableModel(ctr.getDataRSV(), ctr.atributeTable());
+        DefaultTableModel model = genery.tableModel(ctr.listToArrayReserva(), ctr.atributeTable());
 
         pnl.setLayout(new BorderLayout());
         pnl.setBackground(Color.WHITE);
@@ -64,7 +61,7 @@ public class ViewsReserva {
             int opcion = JOptionPane.showConfirmDialog(null, "¿Desea Eliminar Reserva?", "CONFIRMACION", JOptionPane.YES_NO_OPTION);
             boolean op = (opcion == JOptionPane.YES_OPTION);
             if(op){
-                ctr.removeRerservaById(table.getValueAt(row, 0).toString());
+                ctr.removeReservaById(table.getValueAt(row, 0).toString());
                 JPanel lstReserva =  listarReserva();
                 genery.ajustarNewPanel(pnl, lstReserva);
             }
@@ -81,6 +78,7 @@ public class ViewsReserva {
     }
 
     public void selectedHuesped() {
+        CtrReserva ctr = new CtrReserva();
         JDialog dg = new JDialog();
 
         JPanel pnl_buscar = new JPanel();
@@ -94,9 +92,7 @@ public class ViewsReserva {
         JButton btn_siguiente = new JButton();
         JButton btn_cancelar = new JButton();
 
-        CtrHuesped ctr = new CtrHuesped();
-        List<String> datosHuesped = new ArrayList<>();
-        model = genery.tableModel(ctr.getDataHPD(), ctr.atributeTable());
+        model = genery.tableModel(ctr.listToArrayHuesped(), ctr.atributeTableHuesped());
 
         dg.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dg.setSize(550, 700);
@@ -118,7 +114,7 @@ public class ViewsReserva {
 
         btn_buscar.addActionListener((e) -> {
             model.setRowCount(0);
-            for (String[] obj : ctr.buscarHPD("numDocumento", txt_buscar.getText())) {
+            for (String[] obj : ctr.searhHuesped("numDocumento", txt_buscar.getText())) {
                 model.addRow(obj);
             }
             btn_siguiente.setEnabled(false);
@@ -151,8 +147,8 @@ public class ViewsReserva {
     }
 
     public void selectedHabitacion(JTextField data) {
+        CtrReserva ctr = new CtrReserva();
         JDialog dg = new JDialog();
-
         JPanel pnl_south = new JPanel();
         JPanel pnl_buscar = new JPanel();
         JScrollPane scroll = new JScrollPane();
@@ -162,7 +158,6 @@ public class ViewsReserva {
         JButton btn_buscar = new JButton();
         JButton btn_siguiente = new JButton();
         JButton btn_cancelar = new JButton();
-        CtrHabitacion ctr = new CtrHabitacion();
 
         dg.setSize(550, 700);
         dg.setLayout(new BorderLayout());
@@ -186,20 +181,20 @@ public class ViewsReserva {
         
         
         if (esVIP) {
-            model = genery.tableModel(ctr.getDataHBTVIPDisponible(), ctr.atributeTable());
+            model = genery.tableModel(ctr.listToArrayDataVipDisponible(), ctr.atributeTableHabitacionVip());
             btn_buscar.addActionListener((e) -> {
                 model.setRowCount(0);
-                for (String[] obj : ctr.buscarHBTVIP("numero", txt_buscar.getText())) {
+                for (String[] obj : ctr.searchHabitacionVIP("numero", txt_buscar.getText())) {
                     model.addRow(obj);
                 }
                 btn_siguiente.setEnabled(false);
             });
             data.setText(data.getText()+",SI");
         } else {
-            model = genery.tableModel(ctr.getDataHBTDisponible(), ctr.atributeTable());
+            model = genery.tableModel(ctr.listToArrayHabitacionDisponible(), ctr.atributeTableHabitacion());
             btn_buscar.addActionListener((e) -> {
                 model.setRowCount(0);
-                for (String[] obj :ctr.buscarHBT("numero", txt_buscar.getText())) {
+                for (String[] obj :ctr.searchHabitacion("numero", txt_buscar.getText())) {
                     model.addRow(obj);
                 }
                 btn_siguiente.setEnabled(false);
@@ -234,6 +229,7 @@ public class ViewsReserva {
     
 
     public void createReserva(JTextField data) {
+        CtrReserva ctr = new CtrReserva();
         JDialog dg = new JDialog();
         JComboBox cbx_diaIngreso = new JComboBox<>(dataFecha(1, 30)); 
         JComboBox cbx_mesIngreso  = new JComboBox<>(dataFecha(1, 12));
@@ -248,7 +244,6 @@ public class ViewsReserva {
         JButton btn_generar = new JButton();
         JButton btn_cancelar = new JButton();
         GridBagConstraints gbc;
-        CtrReserva ctr = new CtrReserva();
 
         dg.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dg.setSize(550, 700);

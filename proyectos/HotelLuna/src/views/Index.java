@@ -29,7 +29,6 @@ public class Index {
      * type: JFrame
      */
     public Index() {
-
         JFrame frame = new JFrame();
         JPanel pnl_index = new JPanel();
         JPanel pnl_indexLogo = new JPanel();
@@ -51,7 +50,6 @@ public class Index {
         JLabel lbl_norte = new JLabel();
         JLabel lbl_sur = new JLabel();
         GridBagConstraints gbc = new GridBagConstraints();
-        
         frame.setLayout(new GridLayout(1, 1));
         frame.setSize(550, 700);
         frame.setResizable(false);

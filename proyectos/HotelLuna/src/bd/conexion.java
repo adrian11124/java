@@ -1,16 +1,16 @@
 package bd;
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.List;
 
 import Models.Habitacion;
 import Models.HabitacionVIP;
 import Models.Huesped;
 import Models.Reserva;
-import hotel.MainRunApp;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Writer;
+import java.net.URL;
 
 /**
  *
@@ -19,141 +19,148 @@ import hotel.MainRunApp;
 public class conexion {
 
     /**
+     * @param url
+     * @param id_table
+     * @return 
+    */
+    public String[] fileReadObject(String url, int id_table) {
+        String[] arrayObject = fileReadObjectOne(url, id_table).split("_");
+        return arrayObject;
+    }
+
+    /**
+     * @param url
+     * @param id_table
+     * @return 
+    */
+    public String fileReadObjectOne(String url, int id_table) {
+        String[] arrayObjects =  fileRead( url);
+        String dataString = arrayObjects[id_table];
+        return dataString;
+    }
+
+    /**
     *Leer archivo de texto
     *return: arreglo
+     * @param url
+     * @return 
     */
-    public static String[] fileRead(String url) {
+    public String[] fileRead(String url) {
         String lineaTotal = "";
-        InputStream fileName = conexion.class.getResourceAsStream(url);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(fileName))) {
+        URL fileUrl = conexion.class.getResource(url);
+        String path = fileUrl.getPath();
+        String pathReplace = path.replace("build/classes", "src");
+        File file = new File(pathReplace);
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 lineaTotal += linea;
             }
-
+            br.close();
         } catch (Exception e) {
             lineaTotal = " FAILED:: " + e;
         }
-        return lineaTotal.substring(0, lineaTotal.length() - 1).split(";");
+        
+        String lineaTotalThwo =  lineaTotal.substring(0, lineaTotal.length() - 1);
+        String[] arrayOne = lineaTotalThwo.split(";");
+        
+        return arrayOne;
     }
 
     /**
-    *Actualiza en archivo
-    *return: boolean
+     * @param url
+     * @param data
+     * @return 
+     * Actualiza en archivo
     */
-    public static boolean fileUpdate(String url, String data) {
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(url))) {
+    public boolean fileUpdate(String url, String data) {
+        URL fileName = conexion.class.getResource("archivo.txt");
+        String path = fileName.getPath();
+        String pathReplace = path.replace("build/classes", "src");
+        try (Writer bw = new FileWriter(pathReplace)){
             bw.write(data);
+            bw.close();
         } catch (Exception e) {
+            System.out.println("FAILED:: conexion.fileUpdate \n\n "+e);
         }
         return false;
     }
 
     /**
-    *Convierte un array a listas(modelo)
-    *return: boolean
+    
+     * @param listHuesped
+     * @param listHabitacion
+     * @param listHabitacionVIP
+     * @param listReserva
+     * status: active
+     * ordena los datos en una cadena String para guardarlos
     */
-    public void ArrayToLists() {
-        try {
-
-            String[] allData = fileRead("archivo.txt");
-            for (int i = 0; i < allData.length; i++) {
-                if (i == 0) {
-                    String[] arrHuesped = allData[i].split("_");
-                    for (String registro : arrHuesped) {
-                        String[] atrs = registro.split(",");
-                        Huesped hpd = new Huesped();
-                        hpd.setId(Integer.valueOf(atrs[0]));
-                        hpd.setNombre(atrs[1]);
-                        hpd.setNumDocumento(Integer.valueOf(atrs[2]));
-                        MainRunApp.listHuespeds.add(hpd);
-                    }
-
-                }
-                if (i == 1) {
-                    String[] arrHBT = allData[i].split("_");
-                    for (String registro : arrHBT) {
-                        String[] atrs = registro.split(",");
-                        Habitacion hbt = new Habitacion();
-                        hbt.setId(Integer.valueOf(atrs[0]));
-                        hbt.setNumero(atrs[1]);
-                        hbt.setPrecio(Integer.valueOf(atrs[2]));
-                        hbt.setTipo(atrs[3]);
-                        hbt.setEstado(atrs[4]);
-                        MainRunApp.listHBT.add(hbt);
-                    }
-                }
-                if (i == 2) {
-                    String[] arrVIP = allData[i].split("_");
-                    for (String registro : arrVIP) {
-                        String[] atrs = registro.split(",");
-                        HabitacionVIP vip = new HabitacionVIP();
-                        vip.setId(Integer.valueOf(atrs[0]));
-                        vip.setNumero(atrs[1]);
-                        vip.setPrecio(Integer.valueOf(atrs[2]));
-                        vip.setTipo(atrs[3]);
-                        vip.setEstado(atrs[4]);
-                        vip.setServiciosExtras(atrs[5]);
-                        MainRunApp.listHBTVIP.add(vip);
-                    }
-                }
-                if (i == 3) {
-                    String[] arrRSV = allData[i].split("_");
-                    for (String registro : arrRSV) {
-                        String[] atrs = registro.split(",");
-                        Reserva rsv = new Reserva();
-                        rsv.setId(Integer.valueOf(atrs[0]));
-                        rsv.setNumHabitacion(atrs[1]);
-                        rsv.setHuesped(atrs[2]);
-                        rsv.setNombreHuesped(atrs[3]);
-                        rsv.setVip(atrs[4]);
-                        rsv.setFechaIngreso(atrs[5]);
-                        rsv.setFechaSalida(atrs[6]);
-                        MainRunApp.listReserva.add(rsv);
-                    }
-                }
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("No se pudo leer el archivo :: " + e);
-        }
-    }
-
-    public void guardarProceso() {
+    public void saveProcess(
+        List<Huesped> listHuesped,
+        List<Habitacion> listHabitacion,
+        List<HabitacionVIP> listHabitacionVIP,
+        List<Reserva> listReserva
+    ) {
         String data = "";
         try {
-            Integer id = 1;
-            if (!MainRunApp.listHuespeds.isEmpty()) {
-                for (Huesped hpd : MainRunApp.listHuespeds) {
-                    data += ((id++) + "," + hpd.getNombre().toUpperCase() + "," + hpd.getNumDocumento() + "_");
+            Integer id_huesped = 1;
+            if(listHuesped == null){
+                data += fileReadObjectOne("/bd/archivo.txt", 0);
+            }else{
+                if (!listHuesped.isEmpty()) {
+                    for (Huesped hpd : listHuesped) {
+                        data += ((id_huesped++) + "," + hpd.getNombre().toUpperCase() + "," + hpd.getNumDocumento() + "_");
+                    }
                 }
             }
-            String substring1 = data.substring(0, data.length() - 1);
+            
+            Integer id_habitacion = 1;
+            String substring1 = data;
             data = substring1 + ";";
-            for (Habitacion hbt : MainRunApp.listHBT) {
-                data += (hbt.getId() + "," + hbt.getNumero() + "," + hbt.getPrecio()
-                        + "," + hbt.getTipo().toUpperCase() + "," + hbt.getEstado().toUpperCase() + "_");
-            }
-            String substring2 = data.substring(0, data.length() - 1);
-            data = substring2 + ";";
-            for (HabitacionVIP hpd : MainRunApp.listHBTVIP) {
-                data += (hpd.getId() + "," + hpd.getNumero() + "," + hpd.getPrecio()
-                        + "," + hpd.getTipo().toUpperCase() + "," + hpd.getEstado().toUpperCase() + "," + hpd.getServiciosExtras() + "_");
-            }
-            String substring3 = data.substring(0, data.length() - 1);
-            data = substring3 + ";";
-            if (!MainRunApp.listReserva.isEmpty()) {
-                id = 1;
-                for (Reserva r : MainRunApp.listReserva) {
-                    data += ((id++) + "," + r.getNumHabitacion() + "," + r.getHuesped()
-                            + "," + r.getNombreHuesped().toUpperCase() + "," + r.getVip() + "," + r.getFechaIngreso() + "," + r.getFechaSalida() + "_");
+            if(listHabitacion == null){
+                data += fileReadObjectOne("/bd/archivo.txt", 1);
+            }else{
+                if (!listHabitacion.isEmpty()) {
+                    for (Habitacion hbt : listHabitacion) {
+                        data += ((id_habitacion++) + "," + hbt.getNumero() + "," + hbt.getPrecio()
+                                + "," + hbt.getTipo().toUpperCase() + "," + hbt.getEstado().toUpperCase() + "_");
+                    }
                 }
             }
-            String substring4 = data.substring(0, data.length() - 1);
+
+            Integer id_habitacionVip = 1;
+            String substring2 = data;
+            data = substring2 + ";";
+            if(listHabitacionVIP == null){
+                data += fileReadObjectOne("/bd/archivo.txt", 2);
+            }else{
+                if (!listHabitacionVIP.isEmpty()) {
+                    for (HabitacionVIP hpd : listHabitacionVIP) {
+                        data += ((id_habitacionVip++) + "," + hpd.getNumero() + "," + hpd.getPrecio()
+                                + "," + hpd.getTipo().toUpperCase() + "," + hpd.getEstado().toUpperCase() + "," + hpd.getServiciosExtras() + "_");
+                    }
+                }
+            }
+
+            Integer id_reserva = 1;
+            String substring3 = data;
+            data = substring3 + ";";
+            if(listReserva == null){
+                data += fileReadObjectOne("/bd/archivo.txt", 3);
+            }else{
+                if (!listReserva.isEmpty()) {
+                    for (Reserva r : listReserva) {
+                        data += ((id_reserva++) + "," + r.getNumHabitacion() + "," + r.getHuesped()
+                                + "," + r.getNombreHuesped().toUpperCase() + "," + r.getVip() + "," + r.getFechaIngreso() + "," + r.getFechaSalida() + "_");
+                    }
+                }
+            }
+            String substring4 = data;
             data = substring4 + ";";
-            fileUpdate("archivo.txt", data);
+            
+            fileUpdate("/bd/archivo.txt", data);
         } catch (Exception e) {
-            System.out.println("No se pudo guardar proceso en documento en texto");
+            System.out.println("No se pudo guardar proceso en documento en texto \n"+e+"\n");
         }
     }
     
