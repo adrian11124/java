@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainRunApp",
+            "request": "launch",
+            "mainClass": "hotel.MainRunApp",
+            "projectName": "java_89b1c843"
+        },
+        {
+            "type": "java",
             "name": "MainApp",
             "request": "launch",
             "mainClass": "dashboardapp.MainApp",
