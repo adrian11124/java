@@ -57,11 +57,11 @@ public class CtrHabitacion {
 
     public String[] fileReadObjectOne() {
         conexion cn = new conexion();
-        return cn.fileReadObject("/bd/archivo.txt", 1);
+        return cn.fileReadObject("File/archivo.txt", 1);
     }
     public String[] fileReadObjectTwo() {
         conexion cn = new conexion();
-        return cn.fileReadObject("/bd/archivo.txt", 2);
+        return cn.fileReadObject("File/archivo.txt", 2);
     }
 
     public void saveProcessOne(List<Habitacion> listHabitacion){

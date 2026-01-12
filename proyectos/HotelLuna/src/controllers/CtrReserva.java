@@ -40,7 +40,7 @@ public class CtrReserva {
 
     public String[] fileReadObject() {
         conexion cn = new conexion();
-        return cn.fileReadObject("/bd/archivo.txt", 3);
+        return cn.fileReadObject("File/archivo.txt", 3);
     }
 
     public void saveProcess(List<Reserva> listReserva){

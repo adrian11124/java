@@ -41,7 +41,7 @@ public class CtrHuesped {
     */
     public String[] fileReadObject() {
         conexion cn = new conexion();
-        return cn.fileReadObject("/bd/archivo.txt", 0);
+        return cn.fileReadObject("File/archivo.txt", 0);
     }
 
     /**

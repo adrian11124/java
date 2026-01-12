@@ -9,6 +9,8 @@ import Models.Huesped;
 import Models.Reserva;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.URL;
 
@@ -47,11 +49,7 @@ public class conexion {
     */
     public String[] fileRead(String url) {
         String lineaTotal = "";
-        URL fileUrl = conexion.class.getResource(url);
-        String path = fileUrl.getPath();
-        String pathReplace = path.replace("build/classes", "src");
-        File file = new File(pathReplace);
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(url))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 lineaTotal += linea;
@@ -74,10 +72,8 @@ public class conexion {
      * Actualiza en archivo
     */
     public boolean fileUpdate(String url, String data) {
-        URL fileName = conexion.class.getResource("archivo.txt");
-        String path = fileName.getPath();
-        String pathReplace = path.replace("build/classes", "src");
-        try (Writer bw = new FileWriter(pathReplace)){
+        File file = new File(url);
+        try (Writer bw = new FileWriter(file)){
             bw.write(data);
             bw.close();
         } catch (Exception e) {
@@ -105,7 +101,7 @@ public class conexion {
         try {
             Integer id_huesped = 1;
             if(listHuesped == null){
-                data += fileReadObjectOne("/bd/archivo.txt", 0);
+                data += fileReadObjectOne("File\\archivo.txt", 0);
             }else{
                 if (!listHuesped.isEmpty()) {
                     for (Huesped hpd : listHuesped) {
@@ -118,7 +114,7 @@ public class conexion {
             String substring1 = data;
             data = substring1 + ";";
             if(listHabitacion == null){
-                data += fileReadObjectOne("/bd/archivo.txt", 1);
+                data += fileReadObjectOne("File\\archivo.txt", 1);
             }else{
                 if (!listHabitacion.isEmpty()) {
                     for (Habitacion hbt : listHabitacion) {
@@ -132,7 +128,7 @@ public class conexion {
             String substring2 = data;
             data = substring2 + ";";
             if(listHabitacionVIP == null){
-                data += fileReadObjectOne("/bd/archivo.txt", 2);
+                data += fileReadObjectOne("File\\archivo.txt", 2);
             }else{
                 if (!listHabitacionVIP.isEmpty()) {
                     for (HabitacionVIP hpd : listHabitacionVIP) {
@@ -146,7 +142,7 @@ public class conexion {
             String substring3 = data;
             data = substring3 + ";";
             if(listReserva == null){
-                data += fileReadObjectOne("/bd/archivo.txt", 3);
+                data += fileReadObjectOne("File\\archivo.txt", 3);
             }else{
                 if (!listReserva.isEmpty()) {
                     for (Reserva r : listReserva) {
@@ -158,7 +154,7 @@ public class conexion {
             String substring4 = data;
             data = substring4 + ";";
             
-            fileUpdate("/bd/archivo.txt", data);
+            fileUpdate("File/archivo.txt", data);
         } catch (Exception e) {
             System.out.println("No se pudo guardar proceso en documento en texto \n"+e+"\n");
         }
